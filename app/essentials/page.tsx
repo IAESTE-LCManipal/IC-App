@@ -1,12 +1,8 @@
 "use client";
 import React, { useState } from "react";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
-import Essentials from "@/components/essential";
-import DialogDemo from "@/components/block";
+import DialogDemo from "@/components/essentialsblock";
 import InternSidebar from "@/components/internsidebar";
 
 
