@@ -1,3 +1,7 @@
+"use client"
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import lcmu from "@/public/lcmu_white.png";
@@ -19,6 +23,34 @@ import {
 } from "@/components/ui/tabs";
 
 export default function SignIn() {
+    const [internID, setInternID] = useState("");
+    const [internPassword, setInternPassword] = useState("");
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+
+    const handleInternSignIn = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError("");
+        try {
+            const result = await signIn("credentials", {
+                internID,
+                password: internPassword,
+                redirect: false,
+            });
+            if (result?.error) {
+                setError(result.error);
+            } else {
+                router.push("/dashboard");
+            }
+        } catch (error) {
+            setError("An unexpected error occurred");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className='flex justify-center items-center min-h-screen bg-gray-900 '>
             <div className='rounded-lg border-2 border-gray-700 py-2 w-[400px] max-w-full'>
@@ -41,17 +73,26 @@ export default function SignIn() {
                                 <CardDescription className="text-sm sm:text-base">Intern Login page.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
+                                {error && (
+                                    <div className="p-3 mb-4 text-sm text-white bg-red-500 rounded">
+                                        {error}
+                                    </div>
+                                )}
                                 <div>
                                     <Label htmlFor="intern-id" className="text-white text-sm sm:text-base">Intern ID</Label>
-                                    <Input id="intern-id" placeholder="Intern ID" className="bg-gray-700 text-white border border-gray-600" />
+                                    <Input id="intern-id" placeholder="Intern ID" className="bg-gray-700 text-white border border-gray-600"
+                                        value={internID} onChange={(e) => setInternID(e.target.value)} />
                                 </div>
                                 <div>
                                     <Label htmlFor="intern-password" className="text-white text-sm sm:text-base">Password</Label>
-                                    <Input id="intern-password" type="password" placeholder="Password" className="bg-gray-700 text-white border border-gray-600" />
+                                    <Input id="intern-password" type="password" placeholder="Password" className="bg-gray-700 text-white border border-gray-600"
+                                        value={internPassword} onChange={(e) => setInternPassword(e.target.value)} />
                                 </div>
                             </CardContent>
                             <CardFooter className="flex justify-end">
-                                <Button className="bg-blue-600 hover:bg-blue-500 text-sm sm:text-base">Login</Button>
+                                <Button className="bg-blue-600 hover:bg-blue-500 text-sm sm:text-base" type="submit" onClick={handleInternSignIn} disabled={isLoading}>
+                                    {isLoading ? "Signing in..." : "Login"}
+                                </Button>
                             </CardFooter>
                         </Card>
                     </TabsContent>
