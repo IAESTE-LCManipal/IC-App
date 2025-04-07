@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 
-export default function Emergency() {
+export default function Emergencies() {
     const { data: session, status } = useSession();
             const router = useRouter();
 
