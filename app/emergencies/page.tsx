@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -8,8 +8,30 @@ import { cn } from "@/lib/utils";
 import Emergency from "../../components/emergency";
 import InternSidebar from "../../components/internsidebar";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export default function emergency() {
+
+export default function Emergency() {
+    const { data: session, status } = useSession();
+            const router = useRouter();
+
+            useEffect(() => {
+                if (status === "loading") return; // Wait for session to load
+
+                if (!session) {
+                  router.push("/signin"); // Redirect unauthenticated users
+                }
+            }, [session, status, router]);
+
+            if (status === "loading") {
+                return <div><span className="loading loading-bars loading-xl"></span></div>; // Show a loading state while session is being fetched
+            }
+
+            if (!session) {
+                return null; // Prevent rendering until navigation completes
+            }
+
     return (
         <>
         <div

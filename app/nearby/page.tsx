@@ -1,11 +1,33 @@
 "use client";
-    import React, { useState } from "react";
-    import { cn } from "@/lib/utils";
+import React, { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
-    import InternSidebar from "@/components/internsidebar";
-    import NearbyCarousel from "@/components/ui/media_slider";
+import InternSidebar from "@/components/internsidebar";
+import NearbyCarousel from "@/components/ui/media_slider";
 
-    export default function Dashboard() {
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+export default function Dashboard() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (status === "loading") return; // Wait for session to load
+
+        if (!session) {
+            router.push("/signin"); // Redirect unauthenticated users
+        }
+    }, [session, status, router]);
+
+    if (status === "loading") {
+        return <div><span className="loading loading-bars loading-xl"></span></div>; // Show a loading state while session is being fetched
+    }
+
+    if (!session) {
+        return null; // Prevent rendering until navigation completes
+    }
+
         const carouselItems = [
                 {
                 id: 1,
