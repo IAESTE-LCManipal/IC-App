@@ -1,0 +1,6 @@
+ignoredBuiltDependencies:
+  - sharp
+
+packages:
+  - 'apps/**'
+  - 'packages/**'
