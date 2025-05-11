@@ -65,5 +65,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow-y: auto;   /* Enable vertical scrolling */
   }
 }
