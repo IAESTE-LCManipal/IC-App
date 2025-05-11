@@ -1,3 +1,4 @@
+//api/interns/route.ts
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/mongoose';
 import Intern from '@/app/api/models/intern';

@@ -1,3 +1,4 @@
+//api/models/intern.ts
 import mongoose, { Schema, Document } from 'mongoose';
 import { hash } from 'bcryptjs';
 
