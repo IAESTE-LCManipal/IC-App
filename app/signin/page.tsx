@@ -1,55 +1,68 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import lcmu from "@/public/lcmu_white.png";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function SignIn() {
-    const [internID, setInternID] = useState("");
-    const [internPassword, setInternPassword] = useState("");
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter();
+  const [internID, setInternID] = useState("");
+  const [internPassword, setInternPassword] = useState("");
+  const [lcEmail, setLcEmail] = useState(""); // NEW
+  const [lcPassword, setLcPassword] = useState(""); // NEW
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-    const handleInternSignIn = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setError("");
-        try {
-            const result = await signIn("credentials", {
-                internID,
-                password: internPassword,
-                redirect: false,
-            });
-            if (result?.error) {
-                setError(result.error);
-            } else {
-                router.push("/dashboard");
-            }
-        } catch (error) {
-            setError("An unexpected error occurred");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+  const handleInternSignIn = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    try {
+      const result = await signIn("intern-credentials", { // CHANGED from 'credentials' to 'intern-credentials'
+        internID,
+        password: internPassword,
+        redirect: false
+      });
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // NEW: Handler for LC login
+  const handleLcSignIn = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    try {
+      const result = await signIn("lc-credentials", {
+        email: lcEmail,
+        password: lcPassword,
+        redirect: false
+      });
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push("/lc-dashboard");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
     return (
         <div className='flex justify-center items-center min-h-screen bg-gray-900 '>
@@ -107,16 +120,17 @@ export default function SignIn() {
                             <CardContent className="space-y-4">
                                 <div>
                                     <Label htmlFor="lc-email" className="text-white text-sm sm:text-base">LC Email</Label>
-                                    <Input id="lc-email" type="email" placeholder="LC Email" className="bg-gray-700 text-white border border-gray-600" />
+                                    <Input id="lc-email" type="email" placeholder="LC Email" className="bg-gray-700 text-white border border-gray-600" value={lcEmail} onChange={(e) => setLcEmail(e.target.value)} />
                                 </div>
                                 <div>
                                     <Label htmlFor="lc-password" className="text-white text-sm sm:text-base">Password</Label>
-                                    <Input id="lc-password" type="password" placeholder="Password" className="bg-gray-700 text-white border border-gray-600" />
+                                    <Input id="lc-password" type="password" placeholder="Password" className="bg-gray-700 text-white border border-gray-600" value={lcPassword} onChange={(e) => setLcPassword(e.target.value)}/>
                                 </div>
                             </CardContent>
                             <CardFooter className="flex flex-col sm:flex-row justify-between">
                                 <a href="#" className="text-sm text-blue-400 hover:underline mb-2 sm:mb-0">Forgot password?</a>
-                                <Button className="bg-blue-600 hover:bg-blue-500 text-sm sm:text-base">Login</Button>
+                                {/* Connect LC login button to handler and loading state */}
+                                <Button className="bg-blue-600 hover:bg-blue-500 text-sm sm:text-base" onClick={handleLcSignIn} disabled={isLoading}>Login</Button>
                             </CardFooter>
                         </Card>
                     </TabsContent>

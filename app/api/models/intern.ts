@@ -16,6 +16,7 @@ export interface IIntern extends Document {
   startDate: Date;
   endDate: Date;
   professorDetails: IProfessorDetails;
+  role: 'intern'; // Add this line
 }
 
 const ProfessorDetailsSchema = new Schema<IProfessorDetails>({
@@ -41,7 +42,8 @@ const InternSchema = new Schema<IIntern>({
   photoUrl: { type: String, default: '' },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
-  professorDetails: { type: ProfessorDetailsSchema, required: true }
+  professorDetails: { type: ProfessorDetailsSchema, required: true },
+  role: { type: String, enum: ['intern'], default: 'intern', required: true }
 });
 
 // Hash password before saving
