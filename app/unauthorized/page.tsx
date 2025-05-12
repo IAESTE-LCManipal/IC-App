@@ -61,6 +61,7 @@ export default function Unauthorized() {
       const paddleWidth = getPaddleWidth();
       const paddleHeight = getPaddleHeight();
       const ballSize = getBallSize();
+      const paddleRadius = paddleWidth / 2;
 
       // Clear screen
       ctx.fillStyle = '#111';
@@ -82,13 +83,22 @@ export default function Unauthorized() {
       ctx.stroke();
       ctx.restore();
 
-      // Draw paddles (with glow)
+      // Draw paddles (with glow, rounded ends)
       ctx.save();
       ctx.shadowColor = '#fff';
       ctx.shadowBlur = 18;
       ctx.fillStyle = '#fff';
-      ctx.fillRect(width * 0.06, leftPaddleY, paddleWidth, paddleHeight);
-      ctx.fillRect(width - width * 0.06 - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
+
+      // Left paddle
+      ctx.beginPath();
+      ctx.roundRect(width * 0.06, leftPaddleY, paddleWidth, paddleHeight, paddleRadius);
+      ctx.fill();
+
+      // Right paddle
+      ctx.beginPath();
+      ctx.roundRect(width - width * 0.06 - paddleWidth, rightPaddleY, paddleWidth, paddleHeight, paddleRadius);
+      ctx.fill();
+
       ctx.restore();
 
       // Draw ball (with blue glow)
@@ -109,22 +119,21 @@ export default function Unauthorized() {
       leftPaddleY = lerp(leftPaddleY, leftTarget, leftSpeed);
       rightPaddleY = lerp(rightPaddleY, rightTarget, rightSpeed);
 
-
       // Move ball
       ballX += ballVX;
       ballY += ballVY;
 
-      // Ball collision with top/bottom (add spin, keep speed)
+      // Ball collision with top/bottom
       if (ballY - ballSize / 2 < height * 0.08) {
         ballY = height * 0.08 + ballSize / 2;
         ballVY = -ballVY;
-       }
+      }
       if (ballY + ballSize / 2 > height * 0.92) {
         ballY = height * 0.92 - ballSize / 2;
         ballVY = -ballVY;
-       }
+      }
 
-      // Ball collision with paddles (add spin, keep speed)
+      // Ball collision with paddles
       if (
         ballX - ballSize / 2 < width * 0.06 + paddleWidth &&
         ballY > leftPaddleY &&
@@ -133,7 +142,7 @@ export default function Unauthorized() {
         ballX = width * 0.06 + paddleWidth + ballSize / 2;
         ballVX = Math.abs(ballVX);
         ballVY += (Math.random() - 0.5) * 0.6;
-       }
+      }
       if (
         ballX + ballSize / 2 > width - width * 0.06 - paddleWidth &&
         ballY > rightPaddleY &&
@@ -142,7 +151,7 @@ export default function Unauthorized() {
         ballX = width - width * 0.06 - paddleWidth - ballSize / 2;
         ballVX = -Math.abs(ballVX);
         ballVY += (Math.random() - 0.5) * 0.6;
-       }
+      }
 
       // Ball out of bounds: reset (should never happen)
       if (ballX < 0 || ballX > width) {
@@ -187,10 +196,10 @@ export default function Unauthorized() {
           Looks like you missed the ball.
         </p>
         <button
-          className="pointer-events-auto border-2 bg-black text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-zinc-900 transition text-lg
+          className="pointer-events-auto border-2 bg-zinc-900 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-zinc-800 transition text-lg
             relative before:absolute before:inset-0 before:rounded-full before:blur-[8px] before:bg-white/70 before:opacity-60 before:z-[-1]"
           style={{
-            boxShadow: '0 0 18px 6px #fff, 0 0 8px 2px #fff',
+            boxShadow: '0 0 10px 4px #fff, 0 0 3px 1px #fff',
             borderColor: '#fff',
           }}
           onClick={() => router.push(redirectPath)}
