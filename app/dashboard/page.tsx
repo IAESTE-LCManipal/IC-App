@@ -1,8 +1,8 @@
 "use client";
 import React, {useEffect} from "react";
 import { cn } from "@/lib/utils";
-import InternSidebar from "@/components/internsidebar";
-import Dash from "../../components/dash";
+import InternSidebar from "@/components/intern/internsidebar";
+import Dash from "../../components/intern/interndash";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

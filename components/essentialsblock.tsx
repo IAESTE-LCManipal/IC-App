@@ -9,7 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import Essentials from "@/components/essential";
+import Essentials from "@/components/intern/essential";
 
 export default function DialogDemo() {
     const [open, setOpen] = useState(false);

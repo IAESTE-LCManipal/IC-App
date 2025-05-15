@@ -9,7 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import Discounts from "@/components/discount";
+import Discounts from "@/components/intern/discount";
 
 export default function DiscountsDialog() {
     const [open, setOpen] = useState(false);

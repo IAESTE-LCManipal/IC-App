@@ -19,9 +19,9 @@ import {
   UsersIcon,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/lc/nav-main"
+import { NavSecondary } from "@/components/lc/nav-secondary"
+import { NavUser } from "@/components/lc/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -46,11 +46,11 @@ const data = {
       url: "/lc-dashboard",
       icon: LayoutDashboardIcon,
     },
-    {
-      title: "Checklist",
-      url: "/lc-dashboard/checklist",
-      icon: IconListDetails,
-    },
+    // {
+    //   title: "Checklist",
+    //   url: "/lc-dashboard/checklist",
+    //   icon: IconListDetails,
+    // },
     // {
     //   title: "Analytics",
     //   url: "#",
@@ -61,19 +61,19 @@ const data = {
     //   url: "#",
     //   icon: FolderIcon,
     // },
-    {
-      title: "Interns",
-      url: "#",
-      icon: UsersIcon,
-    },
+    // {
+    //   title: "Interns",
+    //   url: "#",
+    //   icon: UsersIcon,
+    // },
   ],
 
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: SettingsIcon,
-    },
+//   navSecondary: [
+    // {
+    //   title: "Settings",
+    //   url: "#",
+    //   icon: SettingsIcon,
+    // },
     // {
     //   title: "Get Help",
     //   url: "#",
@@ -84,7 +84,7 @@ const data = {
     //   url: "#",
     //   icon: SearchIcon,
     // },
-  ],
+//   ],
 
 }
 
@@ -116,7 +116,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
