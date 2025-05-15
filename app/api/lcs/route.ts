@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     await dbConnect();
 
     const body = await request.json();
-    const { email, firstName, lastName, sroSlot, internsAssigned } = body;
+    const { email, firstName, lastName, sroSlot } = body;
 
     // Generate a random 8-character alphanumeric password
     const password = generateAlphanumeric(8);
@@ -20,7 +20,6 @@ export async function POST(request: Request) {
         lastName,
         sroSlot,
         password,
-        internsAssigned: []
     });
 
     // Return the intern without the hashed password

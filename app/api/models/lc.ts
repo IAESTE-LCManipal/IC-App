@@ -8,8 +8,7 @@ export interface ILC extends Document {
   lastName: string;
   sroSlot: string;
   password: string;
-  internsAssigned: Types.ObjectId[]; // references to Intern documents
-    role: 'lc'; // Add this line
+  role: 'lc';
 
 }
 
@@ -28,12 +27,6 @@ const LCSchema = new Schema<ILC>({
     type: String,
     required: true
   },
-  internsAssigned: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Intern',
-    required: true,
-    default: []
-  }],
   role: { type: String, enum: ['lc'], default: 'lc', required: true }
 
 });
