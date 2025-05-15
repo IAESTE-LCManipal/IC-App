@@ -1,45 +1,56 @@
+//app/lc-dashboard/page.tsx
 "use client";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { cn } from "@/lib/utils";
-import LCSidebar from "@/components/lc/lcsidebar";
-import Dash from "@/components/lc/lcdash";
-
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+import { AppSidebar } from "@/components/lc/app-sidebar";
+// import { DataTable } from "@/components/data-table";
+import { SectionCards } from "@/components/section-cards";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+
 
 export default function Dashboard() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
     useEffect(() => {
-        if (status === "loading") return; // Wait for session to load
-
+        if (status === "loading") return;
         if (!session) {
-          router.push("/signin"); // Redirect unauthenticated users
+        router.push("/signin");
         }
     }, [session, status, router]);
 
     if (status === "loading") {
-        return <div><span className="loading loading-bars loading-xl"></span></div>; // Show a loading state while session is being fetched
+        return (
+        <div>
+            <span className="loading loading-bars loading-xl"></span>
+        </div>
+        );
     }
 
     if (!session) {
-        return null; // Prevent rendering until navigation completes
+        return null;
     }
 
     return (
-    <>
-        <div
-            className={cn(
-                "mx-auto flex w-full max-w-screen flex-1 flex-col overflow-auto rounded-md border border-neutral-200 bg-[#101827] md:flex-row dark:border-neutral-700 dark:bg-neutral-800",
-                "h-screen"
-            )}
-        >
-            <LCSidebar />
-            <div className="flex h-full w-full flex-1 flex-col gap-2 border-0 bg-neutral-900">
-                <Dash />
+        <SidebarProvider>
+            <AppSidebar variant="inset" />
+            <SidebarInset>
+            <SiteHeader />
+            <div className="flex flex-1 flex-col">
+                <div className="@container/main flex flex-1 flex-col gap-2">
+                <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+                    <SectionCards />
+                    <div className="px-4 lg:px-6">
+
+                    </div>
+                </div>
+                </div>
             </div>
-        </div>
-    </>
+            </SidebarInset>
+        </SidebarProvider>
     );
-};
+}

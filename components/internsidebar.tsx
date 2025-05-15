@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/intern-sidebar";
 import {
   IconArrowLeft,
   IconBrandTabler,
@@ -10,8 +10,6 @@ import {
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import iaeste from "@/public/iaeste.png";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
