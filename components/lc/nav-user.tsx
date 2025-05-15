@@ -7,6 +7,7 @@ import {
   MoreVerticalIcon,
   UserCircleIcon,
 } from "lucide-react"
+import { signOut } from "next-auth/react"
 
 import {
   Avatar,
@@ -83,7 +84,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel> */}
             {/* <DropdownMenuSeparator /> */}
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/signin" })}>
               <LogOutIcon />
               Log out
             </DropdownMenuItem>

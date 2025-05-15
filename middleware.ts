@@ -10,19 +10,33 @@ export default withAuth({
 });
 
 // Add role-based protection here
-export async function middleware(request) {
+export async function middleware(request: any) {
   // This gets the JWT token (works for both secure and non-secure cookies)
   const token =
     request.cookies.get("next-auth.session-token")?.value ||
     request.cookies.get("__Secure-next-auth.session-token")?.value;
 
-  // Root path redirect logic (unchanged)
+  // Root path redirect logic (updated)
   if (request.nextUrl.pathname === "/") {
-    if (token) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    } else {
+    if (!token) {
       return NextResponse.redirect(new URL("/signin", request.url));
     }
+    // Get the decoded JWT to access the user's role
+    const session = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+    if (!session) {
+      return NextResponse.redirect(new URL("/signin", request.url));
+    }
+    if (session.role === "intern") {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+    if (session.role === "lc") {
+      return NextResponse.redirect(new URL("/lc-dashboard", request.url));
+    }
+    // Default fallback
+    return NextResponse.redirect(new URL("/signin", request.url));
   }
 
   // If not authenticated, let withAuth handle redirect

@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 
 import { cn } from "@/lib/utils";
-import DiscountsDialog from "@/components/discountsblock";
+import DiscountsDialog from "@/components/intern/discountsblock";
 import InternSidebar from "@/components/intern/internsidebar";
 
 import { useSession } from "next-auth/react";
