@@ -27,9 +27,6 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    // You'll need to create a model for SRO checklists or add it to your Intern model
-    // For now, I'll assume you'll create a new model
-
     // Create or update the SRO checklist
     const updatedIntern = await Intern.findByIdAndUpdate(
       internId,

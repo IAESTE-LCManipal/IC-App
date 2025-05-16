@@ -16,12 +16,18 @@ interface SROChecklistModalProps {
 
 export function SROChecklistModal({ isOpen, onClose, internId, internName }: SROChecklistModalProps) {
   const [checklist, setChecklist] = useState({
-    documentationReviewed: false,
-    initialMeetingCompleted: false,
-    projectAssigned: false,
-    weeklyCheckInsScheduled: false,
-    midtermEvaluationCompleted: false,
-    finalEvaluationCompleted: false,
+    oiacIntimation: false,
+    accomodationMail: false,
+    cabMail: false,
+    ci: false,
+    cForm: false,
+    sForm: false,
+    frroIfRequired: false,
+    bonafideCertificate: false,
+    stipend: false,
+    hostelUndertaking: false,
+    idCard: false,
+    wifiAccess: false,
   });
 
   const handleSave = async () => {
@@ -67,8 +73,23 @@ export function SROChecklistModal({ isOpen, onClose, internId, internName }: SRO
                 }
               />
               <Label htmlFor={key}>
-                {key.replace(/([A-Z])/g, ' $1')
-                  .replace(/^./, str => str.toUpperCase())}
+                {(() => {
+                  switch (key) {
+                    case 'oiacIntimation': return 'OIAC Intimation';
+                    case 'accomodationMail': return 'Accomodation Mail';
+                    case 'cabMail': return 'Cab Mail';
+                    case 'ci': return 'CI';
+                    case 'cForm': return 'C Form';
+                    case 'sForm': return 'S Form';
+                    case 'frroIfRequired': return 'FRRO (If Required)';
+                    case 'bonafideCertificate': return 'Bonafide Certificate';
+                    case 'stipend': return 'Stipend';
+                    case 'hostelUndertaking': return 'Hostel Undertaking';
+                    case 'idCard': return 'ID Card';
+                    case 'wifiAccess': return 'WIFI Access';
+                    default: return key;
+                  }
+                })()}
               </Label>
             </div>
           ))}
