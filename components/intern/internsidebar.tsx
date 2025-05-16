@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/intern-sidebar";
 import {
   IconArrowLeft,
   IconBrandTabler,
@@ -10,8 +10,6 @@ import {
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import iaeste from "@/public/iaeste.png";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -24,28 +22,28 @@ export default function InternSidebar() {
       label: "Dashboard",
       href: "/dashboard",
       icon: (
-        <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700" />
       ),
     },
     {
       label: "WhatsApp",
       href: "https://chat.whatsapp.com/GILNs2ElSRgHHB42aW6Zge",
       icon: (
-        <IconBrandWhatsapp className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        <IconBrandWhatsapp className="h-5 w-5 shrink-0 text-neutral-700" />
       ),
     },
-    {
-      label: "Settings",
-      href: "#",
-      icon: (
-        <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-      ),
-    },
+    // {
+    //   label: "Settings",
+    //   href: "#",
+    //   icon: (
+    //     <IconSettings className="h-5 w-5 shrink-0 text-neutral-700" />
+    //   ),
+    // },
     {
       label: "Logout",
       href: "/signin",
       icon: (
-        <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700" />
       ),
     },
   ];
@@ -132,7 +130,7 @@ export const Logo = () => {
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="font-medium whitespace-pre text-black dark:text-white"
+        className="font-medium whitespace-pre text-black"
       >
         IAESTE MU
       </motion.span>

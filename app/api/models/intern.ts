@@ -1,4 +1,4 @@
-//api/models/intern.ts
+// api/models/intern.ts
 import mongoose, { Schema, Document } from 'mongoose';
 import { hash } from 'bcryptjs';
 
@@ -15,7 +15,9 @@ export interface IIntern extends Document {
   photoUrl: string;
   startDate: Date;
   endDate: Date;
+  sroSlot: string; // Added sroSlot field
   professorDetails: IProfessorDetails;
+  role: 'intern';
 }
 
 const ProfessorDetailsSchema = new Schema<IProfessorDetails>({
@@ -41,7 +43,9 @@ const InternSchema = new Schema<IIntern>({
   photoUrl: { type: String, default: '' },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
-  professorDetails: { type: ProfessorDetailsSchema, required: true }
+  sroSlot: { type: String, match: /^[0-9]{2}$/, required: true },
+  professorDetails: { type: ProfessorDetailsSchema, required: true },
+  role: { type: String, enum: ['intern'], default: 'intern', required: true }
 });
 
 // Hash password before saving

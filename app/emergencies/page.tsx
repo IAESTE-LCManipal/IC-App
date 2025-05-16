@@ -5,8 +5,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import Emergency from "../../components/emergency";
-import InternSidebar from "../../components/internsidebar";
+import Emergency from "../../components/intern/emergency";
+import InternSidebar from "../../components/intern/internsidebar";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

@@ -1,6 +1,6 @@
 "use client"
 
-import InternProfile from "@/components/profile";
+import InternProfile from "@/components/intern/profile";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

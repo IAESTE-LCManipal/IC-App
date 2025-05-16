@@ -2,8 +2,8 @@
 import React, { useEffect} from "react";
 
 import { cn } from "@/lib/utils";
-import DialogDemo from "@/components/essentialsblock";
-import InternSidebar from "@/components/internsidebar";
+import DialogDemo from "@/components/intern/essentialsblock";
+import InternSidebar from "@/components/intern/internsidebar";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

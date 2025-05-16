@@ -9,9 +9,9 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import Discounts from "@/components/discount";
+import Essentials from "@/components/intern/essential";
 
-export default function DiscountsDialog() {
+export default function DialogDemo() {
     const [open, setOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<{ title: string; hidden: string } | null>(null);
 
@@ -22,7 +22,7 @@ export default function DiscountsDialog() {
 
     return (
         <>
-        <Discounts onItemClick={handleItemClick} />
+        <Essentials onItemClick={handleItemClick} />
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>

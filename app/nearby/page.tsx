@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { cn } from "@/lib/utils";
 
-import InternSidebar from "@/components/internsidebar";
+import InternSidebar from "@/components/intern/internsidebar";
 import NearbyCarousel from "@/components/ui/media_slider";
 
 import { useSession } from "next-auth/react";

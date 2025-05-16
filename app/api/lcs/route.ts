@@ -1,7 +1,7 @@
-//api/interns/route.ts
+//api/lcs/route.ts
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/mongoose';
-import Intern from '@/app/api/models/intern';
+import Intern from '@/app/api/models/lc';
 import { generateAlphanumeric } from '@/lib/utils';
 
 export async function POST(request: Request) {
@@ -9,25 +9,22 @@ export async function POST(request: Request) {
     await dbConnect();
 
     const body = await request.json();
-    const { internID, fullName, photoUrl, startDate, endDate, sroSlot, professorDetails } = body;
+    const { email, firstName, lastName, sroSlot } = body;
 
     // Generate a random 8-character alphanumeric password
     const password = generateAlphanumeric(8);
 
-    const intern = await Intern.create({
-        internID,
-        password,
-        fullName,
-        photoUrl,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+    const lc = await Intern.create({
+        email,
+        firstName,
+        lastName,
         sroSlot,
-        professorDetails
+        password,
     });
 
     // Return the intern without the hashed password
     const internWithoutPassword = {
-      ...intern.toObject(),
+      ...lc.toObject(),
       password: undefined
     };
 
