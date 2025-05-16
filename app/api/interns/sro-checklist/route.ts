@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/mongoose';
 import Intern from '@/app/api/models/intern';
+import SROChecklist from '@/app/api/models/sroChecklist';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
@@ -9,7 +10,7 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || session.user.role !== 'lc') {
+    if (!session || (session.user as any)?.role !== 'lc') {
       return NextResponse.json({
         success: false,
         error: "Unauthorized"
@@ -27,23 +28,32 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    // Create or update the SRO checklist
-    const updatedIntern = await Intern.findByIdAndUpdate(
-      internId,
-      { $set: { sroChecklist: checklist } },
-      { new: true }
-    ).select('-password');
-
-    if (!updatedIntern) {
+    // Check if intern exists
+    const intern = await Intern.findById(internId);
+    if (!intern) {
       return NextResponse.json({
         success: false,
         error: "Intern not found"
       }, { status: 404 });
     }
 
+    // Use intern.internID (the string) as the link for the checklist
+    const updatedChecklist = await SROChecklist.findOneAndUpdate(
+      { internID: intern.internID },
+      { checklist, updatedAt: new Date() },
+      { new: true, upsert: true }
+    );
+
+    // Optionally, you can also update the Intern's sroChecklist field if you want to keep it in sync
+    // await Intern.findByIdAndUpdate(
+    //   internId,
+    //   { $set: { sroChecklist: checklist } },
+    //   { new: true }
+    // ).select('-password');
+
     return NextResponse.json({
       success: true,
-      data: updatedIntern
+      data: updatedChecklist
     });
 
   } catch (error: any) {

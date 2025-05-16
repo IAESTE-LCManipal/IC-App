@@ -5,8 +5,11 @@ import { compare } from "bcryptjs";
 import dbConnect from "@/lib/db/mongoose";
 import Intern from "@/app/api/models/intern";
 import LC from "@/app/api/models/lc";
+import type { NextAuthOptions, Session, User } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 
-const handler = NextAuth({
+// Extract the NextAuth options object for export
+const authOptions: NextAuthOptions = {
   providers: [
     // Intern Credentials
     CredentialsProvider({
@@ -75,45 +78,45 @@ const handler = NextAuth({
     })
   ],
   session: {
-    strategy: "jwt"
+    strategy: "jwt" as const
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role; // Store user role
-        if (user.role === "intern") {
-          token.internID = user.internID;
-          token.startDate = user.startDate;
-          token.endDate = user.endDate;
-          token.professorDetails = user.professorDetails;
+        token.id = (user as any).id;
+        token.role = (user as any).role;
+        if ((user as any).role === "intern") {
+          token.internID = (user as any).internID;
+          token.startDate = (user as any).startDate;
+          token.endDate = (user as any).endDate;
+          token.professorDetails = (user as any).professorDetails;
         }
-        if (user.role === "lc") {
-          token.email = user.email;
-          token.firstName = user.firstName;
-          token.lastName = user.lastName;
-          token.sroSlot = user.sroSlot;
-          token.internsAssigned = user.internsAssigned;
+        if ((user as any).role === "lc") {
+          token.email = (user as any).email;
+          token.firstName = (user as any).firstName;
+          token.lastName = (user as any).lastName;
+          token.sroSlot = (user as any).sroSlot;
+          token.internsAssigned = (user as any).internsAssigned;
         }
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.role = token.role;
+        (session.user as any).id = token.id;
+        (session.user as any).role = token.role;
         if (token.role === "intern") {
-          session.user.internID = token.internID;
-          session.user.startDate = token.startDate;
-          session.user.endDate = token.endDate;
-          session.user.professorDetails = token.professorDetails;
+          (session.user as any).internID = token.internID;
+          (session.user as any).startDate = token.startDate;
+          (session.user as any).endDate = token.endDate;
+          (session.user as any).professorDetails = token.professorDetails;
         }
         if (token.role === "lc") {
-          session.user.email = token.email;
-          session.user.firstName = token.firstName;
-          session.user.lastName = token.lastName;
-          session.user.sroSlot = token.sroSlot;
-          session.user.internsAssigned = token.internsAssigned;
+          (session.user as any).email = token.email;
+          (session.user as any).firstName = token.firstName;
+          (session.user as any).lastName = token.lastName;
+          (session.user as any).sroSlot = token.sroSlot;
+          (session.user as any).internsAssigned = token.internsAssigned;
         }
       }
       return session;
@@ -123,6 +126,9 @@ const handler = NextAuth({
     signIn: "/signin"
   },
   secret: process.env.NEXTAUTH_SECRET
-});
+};
 
+const handler = NextAuth(authOptions);
+
+export { authOptions };
 export { handler as GET, handler as POST };
