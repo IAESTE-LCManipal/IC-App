@@ -86,6 +86,17 @@ export async function middleware(request: any) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
+  // Admins: allow only admin-dashboard and their related pages (customize as needed)
+  if (
+    session.role === "admin" &&
+    !(
+      pathname.startsWith("/admin-dashboard")
+      // Add more admin-specific pages as needed
+    )
+  ) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
+
   return NextResponse.next();
 }
 
@@ -100,5 +111,6 @@ export const config = {
     "/nearby/:path*",
     "/discounts/:path*",
     "/calendar/:path*",
+    "/admin-dashboard/:path*", // Add admin dashboard to matcher
   ],
 };

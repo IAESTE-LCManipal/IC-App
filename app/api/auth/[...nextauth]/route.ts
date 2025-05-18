@@ -5,6 +5,7 @@ import { compare } from "bcryptjs";
 import dbConnect from "@/lib/db/mongoose";
 import Intern from "@/app/api/models/intern";
 import LC from "@/app/api/models/lc";
+import Admin from "@/app/api/models/admin";
 import type { NextAuthOptions, Session, User } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 
@@ -75,6 +76,36 @@ const authOptions: NextAuthOptions = {
           role: lc.role // 'lc'
         };
       }
+    }),
+    // Admin Credentials
+    CredentialsProvider({
+      id: "admin-credentials",
+      name: "Admin Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Please enter your email and password");
+        }
+        await dbConnect();
+        const admin = await Admin.findOne({ email: credentials.email });
+        if (!admin) {
+          throw new Error("No admin found with this email");
+        }
+        const isPasswordValid = credentials.password === admin.password;
+        if (!isPasswordValid) {
+          throw new Error("Invalid password");
+        }
+        return {
+          id: admin._id.toString(),
+          email: admin.email,
+          firstName: admin.firstName,
+          lastName: admin.lastName,
+          role: "admin"
+        };
+      }
     })
   ],
   session: {
@@ -98,6 +129,11 @@ const authOptions: NextAuthOptions = {
           token.sroSlot = (user as any).sroSlot;
           token.internsAssigned = (user as any).internsAssigned;
         }
+        if ((user as any).role === "admin") {
+          token.email = (user as any).email;
+          token.firstName = (user as any).firstName;
+          token.lastName = (user as any).lastName;
+        }
       }
       return token;
     },
@@ -117,6 +153,11 @@ const authOptions: NextAuthOptions = {
           (session.user as any).lastName = token.lastName;
           (session.user as any).sroSlot = token.sroSlot;
           (session.user as any).internsAssigned = token.internsAssigned;
+        }
+        if (token.role === "admin") {
+          (session.user as any).email = token.email;
+          (session.user as any).firstName = token.firstName;
+          (session.user as any).lastName = token.lastName;
         }
       }
       return session;

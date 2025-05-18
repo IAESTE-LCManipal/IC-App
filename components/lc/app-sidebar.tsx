@@ -37,9 +37,9 @@ import Image from "next/image"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "LC",
+    email: "lc-mu@iaeste.in",
+    avatar: "",
   },
   navMain: [
     {

@@ -19,7 +19,7 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleInternSignIn = async (e) => {
+  const handleInternSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
@@ -41,19 +41,30 @@ export default function SignIn() {
     }
   };
 
-  // NEW: Handler for LC login
-  const handleLcSignIn = async (e) => {
+  // Handler for LC/Admin login
+  const handleLcSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
     try {
-      const result = await signIn("lc-credentials", {
+      // Try LC login first
+      let result = await signIn("lc-credentials", {
         email: lcEmail,
         password: lcPassword,
         redirect: false
       });
       if (result?.error) {
-        setError(result.error);
+        // If LC login fails, try admin login
+        result = await signIn("admin-credentials", {
+          email: lcEmail,
+          password: lcPassword,
+          redirect: false
+        });
+        if (result?.error) {
+          setError(result.error);
+        } else {
+          router.push("/admin-dashboard");
+        }
       } else {
         router.push("/lc-dashboard");
       }
