@@ -18,6 +18,7 @@ import {
   SettingsIcon,
   UsersIcon,
 } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 import { NavMain } from "@/components/lc/nav-main"
 import { NavSecondary } from "@/components/lc/nav-secondary"
@@ -89,6 +90,25 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session } = useSession();
+  // Defensive extraction for LC user fields
+  let user = data.user;
+  let initials = "LC";
+  if (
+    session?.user &&
+    typeof (session.user as any).role === "string" &&
+    (session.user as any).role === "lc"
+  ) {
+    const firstName = (session.user as any).firstName || "";
+    const lastName = (session.user as any).lastName || "";
+    const email = (session.user as any).email || "";
+    initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase() || email.charAt(0).toUpperCase();
+    user = {
+      name: `${firstName} ${lastName}`.trim() || email,
+      email: email,
+      avatar: "" // empty string to force fallback
+    };
+  }
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -119,7 +139,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} initials={initials} />
       </SidebarFooter>
     </Sidebar>
   )
