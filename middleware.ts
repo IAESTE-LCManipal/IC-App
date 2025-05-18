@@ -2,14 +2,14 @@ import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-// This part handles unauthenticated users as before
+// This part handles unauthenticated users
 export default withAuth({
   pages: {
     signIn: "/signin",
   },
 });
 
-// Add role-based protection here
+// role-based protection
 export async function middleware(request: any) {
   // This gets the JWT token (works for both secure and non-secure cookies)
   const token =
