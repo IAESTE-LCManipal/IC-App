@@ -2,23 +2,23 @@
 
 import * as React from "react"
 import {
-  BarChartIcon,
-  FolderIcon,
-  LayoutDashboardIcon,
-  ListIcon,
-  UsersIcon,
+    CalendarClockIcon,
+    LayoutDashboardIcon,
+    ListIcon,
+    UsersIcon,
+    type LucideIcon,
 } from "lucide-react"
 
 import { NavMain } from "@/components/admin/nav-main"
 import { NavUser } from "@/components/admin/nav-user"
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Image from "next/image"
 
@@ -35,24 +35,19 @@ const data = {
       icon: LayoutDashboardIcon,
     },
     {
-      title: "Lifecycle",
-      url: "/death",
+      title: "Interns",
+      url: "/admin-dashboard/interns",
       icon: ListIcon,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: BarChartIcon,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: FolderIcon,
     },
     {
       title: "Team",
       url: "/admin-dashboard/lcmu",
       icon: UsersIcon,
+    },
+    {
+      title: "SRO Slots",
+      url: "/admin-dashboard/slots",
+      icon: CalendarClockIcon,
     },
   ],
 }
