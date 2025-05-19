@@ -1,6 +1,4 @@
-import { TrendingDownIcon, TrendingUpIcon } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
+import React, { useEffect, useState } from "react"
 import {
   Card,
   CardDescription,
@@ -10,90 +8,112 @@ import {
 } from "@/components/ui/card"
 
 export function SectionCards() {
+  const [stats, setStats] = useState({
+    totalInterns: 0,
+    completedSRO: 0,
+    zeroCompleted: 0,
+    lcsInSlot: 0,
+    slotNumber: null,
+    loading: true,
+    error: "",
+  })
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      setStats((s) => ({ ...s, loading: true, error: "" }))
+      try {
+        const res = await fetch("/api/admin/section-stats", { method: "POST" })
+        const data = await res.json()
+        if (data.success) {
+          setStats((s) => ({ ...s, ...data.stats, loading: false }))
+        } else {
+          setStats((s) => ({
+            ...s,
+            loading: false,
+            error: data.error || "Failed to fetch stats",
+          }))
+        }
+      } catch (e) {
+        setStats((s) => ({
+          ...s,
+          loading: false,
+          error: (e as any).message || "Error fetching stats",
+        }))
+      }
+    }
+    fetchStats()
+  }, [])
+
+  if (stats.loading) return <div className="p-4">Loading stats...</div>
+  if (stats.error)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <span className="text-red-500 text-lg font-semibold">{stats.error}</span>
+      </div>
+    )
+
   return (
-    <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card lg:px-6">
+    <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-2 2xl:grid-cols-4 *:data-[slot=card]:shadow-xs *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card lg:px-6">
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription>Total Interns in Current Slot</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            $1,250.00
+            {stats.totalInterns}
           </CardTitle>
-          <div className="absolute right-4 top-4">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              <TrendingUpIcon className="size-3" />
-              +12.5%
-            </Badge>
-          </div>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <TrendingUpIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Visitors for the last 6 months
+            Intern(s) assigned to slot {stats.slotNumber}
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>New Customers</CardDescription>
+          <CardDescription>
+            <br></br>
+          </CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            1,234
+            {stats.completedSRO}
           </CardTitle>
-          <div className="absolute right-4 top-4">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              <TrendingDownIcon className="size-3" />
-              -20%
-            </Badge>
-          </div>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Down 20% this period <TrendingDownIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Acquisition needs attention
+            All checklist items completed in slot {stats.slotNumber}
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>
+            <br></br>
+          </CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            45,678
+            {stats.zeroCompleted}
           </CardTitle>
-          <div className="absolute right-4 top-4">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              <TrendingUpIcon className="size-3" />
-              +12.5%
-            </Badge>
-          </div>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention <TrendingUpIcon className="size-4" />
+            Interns with No Checklist progress yet in slot {stats.slotNumber}
           </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>Growth Rate</CardDescription>
+          <CardDescription>LCs in Current Slot</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            4.5%
+            {stats.lcsInSlot}
           </CardTitle>
-          <div className="absolute right-4 top-4">
-            <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-              <TrendingUpIcon className="size-3" />
-              +4.5%
-            </Badge>
-          </div>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Steady performance <TrendingUpIcon className="size-4" />
+            Number of LCs assigned to slot {stats.slotNumber}
           </div>
-          <div className="text-muted-foreground">Meets growth projections</div>
         </CardFooter>
       </Card>
     </div>
