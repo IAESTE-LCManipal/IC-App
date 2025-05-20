@@ -7,6 +7,7 @@ import { AppSidebar } from "@/components/admin/app-sidebar"
 import { SectionCards } from "@/components/admin/admin-cards"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { LCsCurrentSlotTable } from "@/components/admin/lcs-current-slot-table";
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
@@ -39,6 +40,7 @@ export default function AdminDashboard() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <SectionCards />
               <div className="px-4 lg:px-6">
+                <LCsCurrentSlotTable/>
               </div>
             </div>
           </div>

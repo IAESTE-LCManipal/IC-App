@@ -43,10 +43,16 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     await dbConnect();
-    const interns = await Intern.find({}).select('-password');
+    const url = new URL(request.url);
+    const slot = url.searchParams.get("slot");
+    let query = {};
+    if (slot) {
+      query = { sroSlot: slot.padStart(2, "0") };
+    }
+    const interns = await Intern.find(query).select('-password');
     return NextResponse.json({ success: true, data: interns });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 400 });
