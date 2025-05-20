@@ -1,7 +1,8 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 export interface CreateInternModalProps {
   open: boolean;
@@ -40,6 +41,20 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
   const [result, setResult] = useState<CreateInternResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [slots, setSlots] = useState<{ slotNumber: number }[]>([]);
+
+  useEffect(() => {
+    async function fetchSlots() {
+      try {
+        const res = await fetch("/api/slots");
+        const json = await res.json();
+        setSlots(json.data || []);
+      } catch (e) {
+        setSlots([]);
+      }
+    }
+    fetchSlots();
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -119,7 +134,16 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
             <Input name="photoUrl" placeholder="Photo URL (optional)" value={form.photoUrl} onChange={handleChange} />
             <Input name="startDate" type="date" placeholder="Start Date" value={form.startDate} onChange={handleChange} required />
             <Input name="endDate" type="date" placeholder="End Date" value={form.endDate} onChange={handleChange} required />
-            <Input name="sroSlot" placeholder="SRO Slot (e.g. 01)" value={form.sroSlot} onChange={handleChange} required pattern="^[0-9]{2}$" />
+            <Select value={form.sroSlot} onValueChange={val => setForm(f => ({ ...f, sroSlot: val }))} required>
+              <SelectTrigger>
+                <SelectValue placeholder="Select SRO Slot" />
+              </SelectTrigger>
+              <SelectContent>
+                {slots.map(slot => (
+                  <SelectItem key={slot.slotNumber} value={String(slot.slotNumber).padStart(2, "0")}>{String(slot.slotNumber).padStart(2, "0")}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Input name="professorName" placeholder="Professor Name" value={form.professorName} onChange={handleChange} required />
             <Input name="professorEmail" placeholder="Professor Email" value={form.professorEmail} onChange={handleChange} required type="email" />
             <Input name="professorContact" placeholder="Professor Contact" value={form.professorContact} onChange={handleChange} required />

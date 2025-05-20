@@ -22,7 +22,7 @@ export function SectionCards() {
     const fetchStats = async () => {
       setStats((s) => ({ ...s, loading: true, error: "" }))
       try {
-        const res = await fetch("/api/admin/section-stats", { method: "POST" })
+        const res = await fetch("/api/admins/section-stats", { method: "POST" })
         const data = await res.json()
         if (data.success) {
           setStats((s) => ({ ...s, ...data.stats, loading: false }))

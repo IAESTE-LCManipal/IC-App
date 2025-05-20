@@ -30,7 +30,7 @@ export function SectionCards() {
       setLoading(true)
       setError("")
       try {
-        const res = await fetch("/api/lc/section-stats", {
+        const res = await fetch("/api/lcs/section-stats", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sroSlot }),
