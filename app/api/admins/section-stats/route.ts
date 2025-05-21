@@ -17,8 +17,9 @@ export async function POST() {
     if (!slot) {
       return NextResponse.json({ success: false, error: 'No active slot found.' }, { status: 404 });
     }
+    const slotNumberStr = slot.slotNumber.toString().padStart(2, "0");
     // Get all interns in this slot
-    const interns = await Intern.find({ sroSlot: slot.slotNumber });
+    const interns = await Intern.find({ sroSlot: slotNumberStr });
     const internIDs = interns.map((i: any) => i.internID);
     // Get all checklists for these interns
     const checklists = await SROChecklist.find({ internID: { $in: internIDs } });
@@ -27,7 +28,7 @@ export async function POST() {
     // Count interns with 0 checklist items completed (all fields false or checklist missing)
     const zeroCompleted = checklists.filter((c: any) => !c.checklist || Object.values(c.checklist).every(v => !v)).length;
     // Count LCs in this slot
-    const lcsInSlot = await LC.countDocuments({ sroSlot: slot.slotNumber });
+    const lcsInSlot = await LC.countDocuments({ sroSlot: slotNumberStr });
     return NextResponse.json({
       success: true,
       stats: {
@@ -35,7 +36,7 @@ export async function POST() {
         completedSRO,
         zeroCompleted,
         lcsInSlot,
-        slotNumber: slot.slotNumber,
+        slotNumber: slotNumberStr,
       },
     });
   } catch (error: any) {

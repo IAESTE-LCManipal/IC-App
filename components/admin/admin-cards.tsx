@@ -69,37 +69,33 @@ export function SectionCards() {
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Intern(s) assigned to slot {stats.slotNumber}
+            Intern(s) assigned to slot {stats.slotNumber ?? 'N/A'}
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>
-            <br></br>
-          </CardDescription>
+          <CardDescription>Interns with Completed SRO Checklist</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
             {stats.completedSRO}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            All checklist items completed in slot {stats.slotNumber}
+            All checklist items completed in slot {stats.slotNumber ?? 'N/A'}
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>
-            <br></br>
-          </CardDescription>
+          <CardDescription>Interns with No Checklist Items Completed</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
             {stats.zeroCompleted}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Interns with No Checklist progress yet in slot {stats.slotNumber}
+            Interns with No Checklist progress yet in slot {stats.slotNumber ?? 'N/A'}
           </div>
         </CardFooter>
       </Card>
@@ -112,7 +108,7 @@ export function SectionCards() {
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Number of LCs assigned to slot {stats.slotNumber}
+            Number of LCs assigned to slot {stats.slotNumber ?? 'N/A'}
           </div>
         </CardFooter>
       </Card>
