@@ -8,6 +8,7 @@ import {
     UsersIcon,
     type LucideIcon,
 } from "lucide-react"
+import { useTheme } from "next-themes"
 
 import { NavMain } from "@/components/admin/nav-main"
 import { NavUser } from "@/components/admin/nav-user"
@@ -53,6 +54,8 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { theme } = useTheme();
+  const logoSrc = theme === "dark" ? "/iaeste_white.png" : "/iaeste.png";
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -65,7 +68,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <div>
                 <div className="h-5 w-6 shrink-0 mb-1">
                     <Image
-                        src="/iaeste_white.png"
+                        src={logoSrc}
                         height={25}
                         width={25}
                         className="shrink-0"

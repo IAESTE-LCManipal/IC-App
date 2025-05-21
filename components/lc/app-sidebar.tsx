@@ -1,27 +1,9 @@
 "use client"
 
 import * as React from "react"
-import {
-  ArrowUpCircleIcon,
-  BarChartIcon,
-  CameraIcon,
-  ClipboardListIcon,
-  DatabaseIcon,
-  FileCodeIcon,
-  FileIcon,
-  FileTextIcon,
-  FolderIcon,
-  HelpCircleIcon,
-  LayoutDashboardIcon,
-  ListIcon,
-  SearchIcon,
-  SettingsIcon,
-  UsersIcon,
-} from "lucide-react"
+import { LayoutDashboardIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
-
 import { NavMain } from "@/components/lc/nav-main"
-import { NavSecondary } from "@/components/lc/nav-secondary"
 import { NavUser } from "@/components/lc/nav-user"
 import {
   Sidebar,
@@ -32,8 +14,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { IconInnerShadowTop, IconListDetails } from "@tabler/icons-react"
 import Image from "next/image"
+import { useTheme } from "next-themes"
 
 const data = {
   user: {
@@ -47,49 +29,12 @@ const data = {
       url: "/lc-dashboard",
       icon: LayoutDashboardIcon,
     },
-    // {
-    //   title: "Checklist",
-    //   url: "/lc-dashboard/checklist",
-    //   icon: IconListDetails,
-    // },
-    // {
-    //   title: "Analytics",
-    //   url: "#",
-    //   icon: BarChartIcon,
-    // },
-    // {
-    //   title: "Projects",
-    //   url: "#",
-    //   icon: FolderIcon,
-    // },
-    // {
-    //   title: "Interns",
-    //   url: "#",
-    //   icon: UsersIcon,
-    // },
   ],
-
-//   navSecondary: [
-    // {
-    //   title: "Settings",
-    //   url: "#",
-    //   icon: SettingsIcon,
-    // },
-    // {
-    //   title: "Get Help",
-    //   url: "#",
-    //   icon: HelpCircleIcon,
-    // },
-    // {
-    //   title: "Search",
-    //   url: "#",
-    //   icon: SearchIcon,
-    // },
-//   ],
-
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { theme } = useTheme();
+    const logoSrc = theme === "dark" ? "/iaeste_white.png" : "/iaeste.png";
   const { data: session } = useSession();
   // Defensive extraction for LC user fields
   let user = data.user;
@@ -121,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <div>
                     <div className="h-5 w-6 shrink-0 mb-1">
                         <Image
-                        src="/iaeste_white.png"
+                        src={logoSrc}
                         height={25}
                         width={25}
                         className="shrink-0"
