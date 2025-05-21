@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import { AppSidebar } from "@/components/lc/app-sidebar";
 // import { DataTable } from "@/components/data-table";
-import { SectionCards } from "@/components/lc/section-cards";
+import { SectionCards } from "@/components/lc/lc-cards";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { InternTable } from "@/components/lc/InternTable";

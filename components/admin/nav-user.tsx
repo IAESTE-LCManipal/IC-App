@@ -54,7 +54,7 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">{initials || (user.name?.split(" ").map((n) => n[0]).join("") || "LC")}</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{initials || (user.name?.split(" ").map((n) => n[0]).join("") || "IC")}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -87,7 +87,7 @@ export function NavUser({
             </DropdownMenuLabel> */}
             {/* <DropdownMenuSeparator /> */}
             <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/signin" })}>
-              <LogOutIcon />
+               <LogOutIcon />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
