@@ -1,8 +1,6 @@
 import { useSession } from "next-auth/react"
 import React, { useEffect, useState } from "react"
-import { TrendingDownIcon, TrendingUpIcon } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardDescription,

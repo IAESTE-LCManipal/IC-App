@@ -13,52 +13,52 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function SignIn() {
   const [internID, setInternID] = useState("");
   const [internPassword, setInternPassword] = useState("");
-  const [lcEmail, setLcEmail] = useState(""); // NEW
-  const [lcPassword, setLcPassword] = useState(""); // NEW
+  const [lcEmail, setLcEmail] = useState("");
+  const [lcPassword, setLcPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleInternSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
     try {
-      const result = await signIn("intern-credentials", { // CHANGED from 'credentials' to 'intern-credentials'
+      const result = await signIn("intern-credentials", {
         internID,
         password: internPassword,
         redirect: false
       });
       if (result?.error) {
-        // Handle error (e.g., show a notification)
+        setError(result.error);
       } else {
         router.push("/dashboard");
       }
     } catch (error) {
-      // Handle unexpected error (e.g., show a notification)
+      setError("Unexpected error. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handler for LC/Admin login
   const handleLcSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
     try {
-      // Try LC login first
       let result = await signIn("lc-credentials", {
         email: lcEmail,
         password: lcPassword,
         redirect: false
       });
       if (result?.error) {
-        // If LC login fails, try admin login
         result = await signIn("admin-credentials", {
           email: lcEmail,
           password: lcPassword,
           redirect: false
         });
         if (result?.error) {
-          // Handle error (e.g., show a notification)
+          setError(result.error);
         } else {
           router.push("/admin-dashboard");
         }
@@ -66,7 +66,7 @@ export default function SignIn() {
         router.push("/lc-dashboard");
       }
     } catch (error) {
-      // Handle unexpected error (e.g., show a notification)
+      setError("Unexpected error. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -76,6 +76,9 @@ export default function SignIn() {
         <div className='flex justify-center items-center min-h-screen bg-gray-900 '>
             <div className='rounded-lg border-2 border-gray-700 py-2 w-[400px] max-w-full'>
                 <Image src={lcmu} alt='lcmu' className='w-40 sm:w-60 h-auto mx-auto mt-4' />
+                {error && (
+                  <div className="text-red-500 text-center my-2 text-sm font-semibold">{error}</div>
+                )}
                 <Tabs defaultValue="intern" className="w-full bg-gray-900 text-white p-4 rounded-lg">
                     <TabsList className="grid w-full grid-cols-2 bg-gray-900 mb-6 rounded-lg">
                         <TabsTrigger value="intern" className="data-[state=active]:bg-gray-700 py-2 px-4 mx-2 rounded-lg data-[state=active]:text-gray-50 text-sm sm:text-base">
@@ -131,7 +134,7 @@ export default function SignIn() {
                                 </div>
                             </CardContent>
                             <CardFooter className="flex flex-col sm:flex-row justify-between">
-                                <a href="#" className="text-sm text-blue-400 hover:underline mb-2 sm:mb-0">Forgot password?</a>
+                                {/* <a href="#" className="text-sm text-blue-400 hover:underline mb-2 sm:mb-0">Forgot password?</a> */}
                                 {/* Connect LC login button to handler and loading state */}
                                 <Button className="bg-blue-600 hover:bg-blue-500 text-sm sm:text-base" onClick={handleLcSignIn} disabled={isLoading}>Login</Button>
                             </CardFooter>
