@@ -49,7 +49,7 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
         const res = await fetch("/api/slots");
         const json = await res.json();
         setSlots(json.data || []);
-      } catch (e) {
+      } catch {
         setSlots([]);
       }
     }

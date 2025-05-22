@@ -34,7 +34,7 @@ export default function SignIn() {
       } else {
         router.push("/dashboard");
       }
-    } catch (error) {
+    } catch {
       setError("Unexpected error. Please try again.");
     } finally {
       setIsLoading(false);
@@ -65,7 +65,7 @@ export default function SignIn() {
       } else {
         router.push("/lc-dashboard");
       }
-    } catch (error) {
+    } catch {
       setError("Unexpected error. Please try again.");
     } finally {
       setIsLoading(false);
