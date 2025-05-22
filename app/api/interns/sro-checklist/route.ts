@@ -4,7 +4,7 @@ import dbConnect from '@/lib/db/mongoose';
 import Intern from '@/app/api/models/intern';
 import SROChecklist from '@/app/api/models/sroChecklist';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '../../auth/authOptions';
 
 export async function POST(request: Request) {
   try {
