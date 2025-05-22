@@ -15,14 +15,12 @@ export default function SignIn() {
   const [internPassword, setInternPassword] = useState("");
   const [lcEmail, setLcEmail] = useState(""); // NEW
   const [lcPassword, setLcPassword] = useState(""); // NEW
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleInternSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
     try {
       const result = await signIn("intern-credentials", { // CHANGED from 'credentials' to 'intern-credentials'
         internID,
@@ -30,12 +28,12 @@ export default function SignIn() {
         redirect: false
       });
       if (result?.error) {
-        setError(result.error);
+        // Handle error (e.g., show a notification)
       } else {
         router.push("/dashboard");
       }
     } catch (error) {
-      setError("An unexpected error occurred");
+      // Handle unexpected error (e.g., show a notification)
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +43,6 @@ export default function SignIn() {
   const handleLcSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
     try {
       // Try LC login first
       let result = await signIn("lc-credentials", {
@@ -61,7 +58,7 @@ export default function SignIn() {
           redirect: false
         });
         if (result?.error) {
-          setError(result.error);
+          // Handle error (e.g., show a notification)
         } else {
           router.push("/admin-dashboard");
         }
@@ -69,7 +66,7 @@ export default function SignIn() {
         router.push("/lc-dashboard");
       }
     } catch (error) {
-      setError("An unexpected error occurred");
+      // Handle unexpected error (e.g., show a notification)
     } finally {
       setIsLoading(false);
     }
@@ -97,11 +94,6 @@ export default function SignIn() {
                                 <CardDescription className="text-sm sm:text-base">Intern Login page.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {error && (
-                                    <div className="p-3 mb-4 text-sm text-white bg-red-500 rounded">
-                                        {error}
-                                    </div>
-                                )}
                                 <div>
                                     <Label htmlFor="intern-id" className="text-white text-sm sm:text-base">Intern ID</Label>
                                     <Input id="intern-id" placeholder="Intern ID" className="bg-gray-700 text-white border border-gray-600"

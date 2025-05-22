@@ -6,7 +6,6 @@ import {
     LayoutDashboardIcon,
     ListIcon,
     UsersIcon,
-    type LucideIcon,
 } from "lucide-react"
 import { useTheme } from "next-themes"
 

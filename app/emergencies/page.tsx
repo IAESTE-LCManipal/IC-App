@@ -1,9 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Emergency from "../../components/intern/emergency";
 import InternSidebar from "../../components/intern/internsidebar";

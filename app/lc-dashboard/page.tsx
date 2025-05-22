@@ -1,7 +1,6 @@
 //app/lc-dashboard/page.tsx
 "use client";
 import React, { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -13,6 +12,22 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { InternTable } from "@/components/lc/InternTable";
 import { SROChecklistModal } from "@/components/lc/SROChecklistModal";
 
+function hasRole(user: any): user is { role: string } {
+  return user && typeof user.role === "string";
+}
+
+function isLCUser(user: any): user is { role: string; sroSlot: string } {
+  return (
+    user &&
+    typeof user === "object" &&
+    user !== null &&
+    "role" in user &&
+    (user as { role?: unknown }).role === "lc" &&
+    "sroSlot" in user &&
+    typeof (user as { sroSlot?: unknown }).sroSlot === "string"
+  );
+}
+
 export default function Dashboard() {
     const { data: session, status } = useSession();
     const router = useRouter();
@@ -23,9 +38,13 @@ export default function Dashboard() {
         if (status === "loading") return;
         if (!session) {
             router.push("/signin");
-        } else if (session.user.role !== "lc") {
-        // Redirect non-LC users to appropriate dashboard
-            router.push(session.user.role === "intern" ? "/intern-dashboard" : "/signin");
+        } else if (!isLCUser(session.user)) {
+            // Redirect non-LC users to appropriate dashboard
+            if (hasRole(session.user) && session.user.role === "intern") {
+                router.push("/intern-dashboard");
+            } else {
+                router.push("/signin");
+            }
         }
     }, [session, status, router]);
 
@@ -42,7 +61,7 @@ export default function Dashboard() {
         );
     }
 
-    if (!session || session.user.role !== "lc") {
+    if (!session || !isLCUser(session.user)) {
         return null;
     }
 

@@ -103,7 +103,7 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
       } else {
         setError(data.error || "Failed to create intern.");
       }
-    } catch (err) {
+    } catch {
       setError("Network error.");
     }
     setLoading(false);
