@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/mongoose';
 import Slot from '@/app/api/models/slot';
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, context: { params: { id: string } }) {
   await dbConnect();
-  const { id } = params;
+  const { id } = context.params;
   try {
     const result = await Slot.findByIdAndDelete(id);
     if (!result) {
