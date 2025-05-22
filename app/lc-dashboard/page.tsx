@@ -12,11 +12,18 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { InternTable } from "@/components/lc/InternTable";
 import { SROChecklistModal } from "@/components/lc/SROChecklistModal";
 
-function hasRole(user: any): user is { role: string } {
+// Define a User type for role checks
+interface User {
+  role?: string;
+  sroSlot?: string;
+  [key: string]: unknown;
+}
+
+function hasRole(user: User): user is { role: string } {
   return user && typeof user.role === "string";
 }
 
-function isLCUser(user: any): user is { role: string; sroSlot: string } {
+function isLCUser(user: User): user is { role: string; sroSlot: string } {
   return (
     user &&
     typeof user === "object" &&
@@ -36,7 +43,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (status === "loading") return;
-        if (!session) {
+        if (!session || !session.user) {
             router.push("/signin");
         } else if (!isLCUser(session.user)) {
             // Redirect non-LC users to appropriate dashboard
@@ -61,7 +68,7 @@ export default function Dashboard() {
         );
     }
 
-    if (!session || !isLCUser(session.user)) {
+    if (!session || !session.user || !isLCUser(session.user)) {
         return null;
     }
 

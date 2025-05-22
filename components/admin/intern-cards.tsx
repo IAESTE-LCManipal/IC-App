@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "@/hooks/use-outside-click";
+import Image from "next/image";
 
 // Define the Professor type
 interface Professor {
@@ -28,7 +29,6 @@ export default function InternCards() {
   const [active, setActive] = useState<Intern | boolean | null>(null);
   const [profModal, setProfModal] = useState<Professor | null>(null);
   const id = useId();
-  const ref = useRef<HTMLDivElement>(null!);
 
   // Separate refs for intern and professor modals
   const internModalRef = useRef<HTMLDivElement>(null!);
@@ -116,12 +116,13 @@ export default function InternCards() {
                 layoutId={`image-${active.fullName}-${id}`}
                 // className="bg-muted dark:bg-muted"
               >
-                <img
+                <Image
                   width={200}
                   height={200}
                   src={active.photoUrl || "/iaeste.png"}
                   alt={active.fullName}
                   className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
+                  priority
                 />
               </motion.div>
               <div>
@@ -215,12 +216,13 @@ export default function InternCards() {
             >
               <div className="flex gap-4 flex-col w-full rounded-xl p-4">
                 <motion.div layoutId={`image-${intern.fullName}-${id}`}>
-                  <img
+                  <Image
                     width={100}
                     height={100}
                     src={intern.photoUrl || "/iaeste.png"}
                     alt={intern.fullName}
                     className="h-60 w-full rounded-lg object-cover object-top"
+                    priority
                   />
                 </motion.div>
                 <div className="flex justify-center items-center flex-col bg-transparent dark:bg-transparent dark:text-card-foreground">

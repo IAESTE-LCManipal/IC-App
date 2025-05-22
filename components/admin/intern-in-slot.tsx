@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 // Define the Intern type
 interface Professor {
@@ -77,12 +78,13 @@ export function InternsInCurrentSlot() {
             >
               <div className="flex gap-4 flex-col w-full rounded-xl p-4">
                 <motion.div layoutId={`image-${intern.fullName}-${intern._id}`}>
-                  <img
+                  <Image
                     width={100}
                     height={100}
                     src={intern.photoUrl || "/iaeste.png"}
                     alt={intern.fullName}
                     className="h-60 w-full rounded-lg object-cover object-top"
+                    priority
                   />
                 </motion.div>
                 <div className="flex justify-center items-center flex-col bg-transparent dark:bg-transparent dark:text-card-foreground">

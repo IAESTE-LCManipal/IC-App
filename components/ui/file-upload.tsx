@@ -55,7 +55,10 @@ export const FileUpload = ({
     <div className="w-full" {...getRootProps()}>
       <motion.div
         onClick={handleClick}
+        initial="initial"
+        animate="initial"
         whileHover="animate"
+        variants={mainVariant}
         className="p-10 group/file block rounded-lg cursor-pointer w-full relative overflow-hidden"
       >
         <input

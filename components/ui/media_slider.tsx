@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import "./NearbyCarousel.css";
@@ -30,7 +30,7 @@ export default function NearbyCarousel({ items }: { items: CarouselItem[] }) {
   const timeAutoNext = 7000;
 
   // Function to arrange thumbnails in the correct order
-  const arrangeThumbnails = () => {
+  const arrangeThumbnails = useCallback(() => {
     if (!thumbnailRef.current) return;
 
     const thumbnailItems = Array.from(thumbnailRef.current.querySelectorAll('.item'));
@@ -62,9 +62,9 @@ export default function NearbyCarousel({ items }: { items: CarouselItem[] }) {
     orderedThumbnails.forEach(item => {
       thumbnailRef.current?.appendChild(item);
     });
-  };
+  }, [activeIndex, items.length]);
 
-  const showSlider = (type: 'next' | 'prev') => {
+  const showSlider = useCallback((type: 'next' | 'prev') => {
     if (!carouselRef.current || !sliderRef.current || !thumbnailRef.current) return;
 
     const sliderItems = sliderRef.current.querySelectorAll('.item');
@@ -94,7 +94,7 @@ export default function NearbyCarousel({ items }: { items: CarouselItem[] }) {
     autoNextRef.current = setTimeout(() => {
       showSlider('next');
     }, timeAutoNext);
-  };
+  }, [arrangeThumbnails, items.length, timeRunning, timeAutoNext]);
 
   // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent) => {
