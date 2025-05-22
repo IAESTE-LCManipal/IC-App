@@ -4,7 +4,6 @@ import * as React from "react"
 import { PlusCircleIcon, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 
-import { Button } from "@/components/ui/button"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -37,14 +36,6 @@ export function NavMain({
                 <PlusCircleIcon />
                 <span className="font-semibold">Add an Intern</span>
                 </SidebarMenuButton>
-                {/* <Button
-                size="icon"
-                className="h-9 w-9 shrink-0 group-data-[collapsible=icon]:opacity-0"
-                variant="outline"
-                >
-                <MailIcon />
-                <span className="sr-only">Inbox</span>
-                </Button> */}
             </SidebarMenuItem>
             </SidebarMenu>
             <SidebarMenu>

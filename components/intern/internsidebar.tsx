@@ -4,7 +4,6 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/intern-sideba
 import {
   IconArrowLeft,
   IconBrandTabler,
-  IconSettings,
   IconBrandWhatsapp,
 } from "@tabler/icons-react";
 import Link from "next/link";
@@ -14,7 +13,7 @@ import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function InternSidebar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
 
   const links = [
@@ -32,13 +31,6 @@ export default function InternSidebar() {
         <IconBrandWhatsapp className="h-5 w-5 shrink-0 text-neutral-700" />
       ),
     },
-    // {
-    //   label: "Settings",
-    //   href: "#",
-    //   icon: (
-    //     <IconSettings className="h-5 w-5 shrink-0 text-neutral-700" />
-    //   ),
-    // },
     {
       label: "Logout",
       href: "/signin",
@@ -60,35 +52,6 @@ export default function InternSidebar() {
               ))}
             </div>
           </div>
-
-          {/* <div className="flex items-center gap-2 px-4 py-2">
-            {session?.user ? (
-              <>
-                <Avatar>
-                  <AvatarImage
-                    src={session.user.image || ""}
-                    alt={session.user.name || "Intern"}
-                  />
-                  <AvatarFallback>
-                    {session.user.name?.charAt(0) || "I"}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="text-sm font-medium">{session.user.name}</p>
-                  <p className="text-xs text-gray-500">{session.user.internID}</p>
-                </div>
-              </>
-            ) : (
-              <>
-                <Avatar>
-                  <AvatarFallback>I</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="text-sm font-medium">Loading...</p>
-                </div>
-              </>
-            )}
-          </div> */}
 
           <SidebarLink
             link={{
