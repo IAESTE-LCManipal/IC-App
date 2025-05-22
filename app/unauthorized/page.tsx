@@ -26,6 +26,7 @@ export default function Unauthorized() {
     if (!ctx) return;
 
     function resize() {
+      if (!canvas) return;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
@@ -33,12 +34,15 @@ export default function Unauthorized() {
     window.addEventListener('resize', resize);
 
     function getPaddleWidth() {
+      if (!canvas) return 16;
       return Math.max(16, canvas.width * 0.015);
     }
     function getPaddleHeight() {
+      if (!canvas) return 80;
       return Math.max(80, canvas.height * 0.18);
     }
     function getBallSize() {
+      if (!canvas) return 14;
       return Math.max(14, Math.min(canvas.width, canvas.height) * 0.025);
     }
 
@@ -56,6 +60,7 @@ export default function Unauthorized() {
     }
 
     function draw() {
+      if (!canvas || !ctx) return;
       const width = canvas.width;
       const height = canvas.height;
       const paddleWidth = getPaddleWidth();
