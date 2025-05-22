@@ -137,7 +137,7 @@ export default function NearbyCarousel({ items }: { items: CarouselItem[] }) {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       if (autoNextRef.current) clearTimeout(autoNextRef.current);
     };
-  }, []);
+  }, [arrangeThumbnails, showSlider]);
 
   return (
     <div className="container">
