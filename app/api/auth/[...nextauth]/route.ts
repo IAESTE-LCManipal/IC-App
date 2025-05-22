@@ -171,24 +171,25 @@ const authOptions: NextAuthOptions = {
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token) {
-        (session.user as any).id = token.id;
-        (session.user as any).role = token.role;
+        const user = session.user as Record<string, unknown>;
+        user.id = token.id;
+        user.role = token.role;
         if (token.role === "intern") {
-          (session.user as any).internID = token.internID;
-          (session.user as any).startDate = token.startDate;
-          (session.user as any).endDate = token.endDate;
-          (session.user as any).professorDetails = token.professorDetails;
+          user.internID = token.internID;
+          user.startDate = token.startDate;
+          user.endDate = token.endDate;
+          user.professorDetails = token.professorDetails;
         }
         if (token.role === "lc") {
-          (session.user as any).email = token.email;
-          (session.user as any).firstName = token.firstName;
-          (session.user as any).lastName = token.lastName;
-          (session.user as any).sroSlot = token.sroSlot;
+          user.email = token.email;
+          user.firstName = token.firstName;
+          user.lastName = token.lastName;
+          user.sroSlot = token.sroSlot;
         }
         if (token.role === "admin") {
-          (session.user as any).email = token.email;
-          (session.user as any).firstName = token.firstName;
-          (session.user as any).lastName = token.lastName;
+          user.email = token.email;
+          user.firstName = token.firstName;
+          user.lastName = token.lastName;
         }
       }
       return session;

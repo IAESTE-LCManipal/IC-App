@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     // Count interns with 0 checklist items completed (all fields false or checklist missing)
     const zeroCompleted = checklists.filter((c: { checklist: Record<string, boolean> }) => {
       if (!c.checklist) return true;
-      return Object.values(c.checklist).every(v => !v);
+      return Object.values(c.checklist).every((v: boolean) => !v);
     }).length;
 
     return NextResponse.json({

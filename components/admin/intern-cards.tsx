@@ -4,7 +4,7 @@ import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 
-// Define the Intern and Professor types
+// Define the Professor type
 interface Professor {
   name: string;
   email: string;
@@ -17,9 +17,9 @@ interface Intern {
   internID: string;
   sroSlot: string;
   photoUrl?: string;
+  professorDetails?: Professor;
   startDate?: string;
   endDate?: string;
-  professorDetails?: Professor;
 }
 
 export default function InternCards() {

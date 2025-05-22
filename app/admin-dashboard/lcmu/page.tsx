@@ -12,8 +12,8 @@ export default function AdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  function isAdminUser(user: any): user is { role: string } {
-    return user && typeof user.role === "string";
+  function isAdminUser(user: unknown): user is { role: string } {
+    return typeof user === 'object' && user !== null && 'role' in user && typeof (user as { role?: unknown }).role === 'string';
   }
 
   useEffect(() => {

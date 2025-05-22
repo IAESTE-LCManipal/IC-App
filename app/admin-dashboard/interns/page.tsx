@@ -8,6 +8,10 @@ import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import InternCards from "@/components/admin/intern-cards";
 
+function isAdminUser(user: unknown): user is { role: string } {
+  return typeof user === 'object' && user !== null && 'role' in user && typeof (user as { role?: unknown }).role === 'string';
+}
+
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -16,7 +20,7 @@ export default function AdminDashboard() {
     if (status === "loading") return;
     if (!session) {
       router.push("/signin");
-    } else if (session.user.role !== "admin") {
+    } else if (!isAdminUser(session.user) || session.user.role !== "admin") {
       router.push("/unauthorized");
     }
   }, [session, status, router]);
@@ -25,7 +29,7 @@ export default function AdminDashboard() {
     return <div><span className="loading loading-bars loading-xl"></span></div>;
   }
 
-  if (!session || session.user.role !== "admin") {
+  if (!session || !isAdminUser(session.user) || session.user.role !== "admin") {
     return null;
   }
 
