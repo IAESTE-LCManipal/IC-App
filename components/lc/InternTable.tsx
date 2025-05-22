@@ -61,7 +61,9 @@ export function InternTable({ onOpenChecklist }: InternTableProps) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            sroSlot: session.user.sroSlot,
+            sroSlot: (session.user && 'sroSlot' in session.user)
+              ? (session.user as { sroSlot?: string }).sroSlot
+              : undefined,
           }),
         });
 
