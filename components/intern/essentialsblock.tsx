@@ -13,9 +13,9 @@ import Essentials from "@/components/intern/essential";
 
 export default function DialogDemo() {
     const [open, setOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState<{ title: string; hidden: string } | null>(null);
+    const [selectedItem, setSelectedItem] = useState<{ title: string; description: string; hidden?: string } | null>(null);
 
-    const handleItemClick = (item: { title: string; hidden: string }) => {
+    const handleItemClick = (item: { title: string; description: string; hidden?: string }) => {
         setSelectedItem(item);
         setOpen(true); // Open the dialog when an item is clicked
     };
