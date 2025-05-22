@@ -3,7 +3,6 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-import { useSession } from "next-auth/react";
 
 // Define the Intern and Professor types
 interface Professor {
@@ -21,11 +20,9 @@ interface Intern {
   startDate?: string;
   endDate?: string;
   professorDetails?: Professor;
-  [key: string]: any;
 }
 
 export default function InternCards() {
-  const { data: session } = useSession();
   const [interns, setInterns] = useState<Intern[]>([]);
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState<Intern | boolean | null>(null);

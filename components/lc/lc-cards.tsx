@@ -16,7 +16,7 @@ function hasSroSlot(user: unknown): user is { sroSlot: string } {
     typeof user === "object" &&
     user !== null &&
     "sroSlot" in user &&
-    typeof (user as any).sroSlot === "string"
+    typeof (user as { sroSlot?: unknown }).sroSlot === "string"
   )
 }
 

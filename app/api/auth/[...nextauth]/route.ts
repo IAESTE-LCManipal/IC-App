@@ -9,6 +9,38 @@ import Admin from "@/app/api/models/admin";
 import type { NextAuthOptions, Session, User } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 
+// Define separate types for each user role
+
+type InternUser = {
+  id: string;
+  role: 'intern';
+  internID: string;
+  startDate: string;
+  endDate: string;
+  professorDetails: unknown;
+  name: string;
+  image: string;
+};
+
+type LCUser = {
+  id: string;
+  role: 'lc';
+  email: string;
+  firstName: string;
+  lastName: string;
+  sroSlot: string;
+};
+
+type AdminUser = {
+  id: string;
+  role: 'admin';
+  email: string;
+  firstName: string;
+  lastName: string;
+};
+
+type UserWithRole = InternUser | LCUser | AdminUser;
+
 // Extract the NextAuth options object for export
 const authOptions: NextAuthOptions = {
   providers: [
@@ -72,7 +104,6 @@ const authOptions: NextAuthOptions = {
           firstName: lc.firstName,
           lastName: lc.lastName,
           sroSlot: lc.sroSlot,
-          internsAssigned: lc.internsAssigned,
           role: lc.role // 'lc'
         };
       }
@@ -114,25 +145,26 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
-        token.id = (user as any).id;
-        token.role = (user as any).role;
-        if ((user as any).role === "intern") {
-          token.internID = (user as any).internID;
-          token.startDate = (user as any).startDate;
-          token.endDate = (user as any).endDate;
-          token.professorDetails = (user as any).professorDetails;
+        const u = user as UserWithRole;
+        token.id = u.id;
+        token.role = u.role;
+        if (u.role === "intern") {
+          token.internID = u.internID;
+          token.startDate = u.startDate;
+          token.endDate = u.endDate;
+          token.professorDetails = u.professorDetails;
         }
-        if ((user as any).role === "lc") {
-          token.email = (user as any).email;
-          token.firstName = (user as any).firstName;
-          token.lastName = (user as any).lastName;
-          token.sroSlot = (user as any).sroSlot;
-          token.internsAssigned = (user as any).internsAssigned;
+        if (u.role === "lc") {
+          token.email = u.email;
+          token.firstName = u.firstName;
+          token.lastName = u.lastName;
+          token.sroSlot = u.sroSlot;
         }
-        if ((user as any).role === "admin") {
-          token.email = (user as any).email;
-          token.firstName = (user as any).firstName;
-          token.lastName = (user as any).lastName;
+        if (u.role === "admin") {
+          token.role = u.role;
+          token.email = u.email;
+          token.firstName = u.firstName;
+          token.lastName = u.lastName;
         }
       }
       return token;
@@ -152,7 +184,6 @@ const authOptions: NextAuthOptions = {
           (session.user as any).firstName = token.firstName;
           (session.user as any).lastName = token.lastName;
           (session.user as any).sroSlot = token.sroSlot;
-          (session.user as any).internsAssigned = token.internsAssigned;
         }
         if (token.role === "admin") {
           (session.user as any).email = token.email;

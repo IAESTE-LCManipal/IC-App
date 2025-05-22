@@ -55,7 +55,8 @@ export async function GET(request: Request) {
     }
     const interns = await Intern.find(query).select('-password');
     return NextResponse.json({ success: true, data: interns });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    return NextResponse.json({ success: false, error: err.message }, { status: 400 });
   }
 }
