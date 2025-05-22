@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import { AppSidebar } from "@/components/admin/app-sidebar"
-import { SectionCards } from "@/components/admin/admin-cards"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import LCTablePage from "@/components/admin/lcmu";
