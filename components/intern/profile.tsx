@@ -18,10 +18,22 @@ export default function InternProfile() {
 
   // Extract intern details from session
   const name = session?.user?.name || "Intern";
-  const id = session?.user?.internID || "N/A";
-  const startDate = session?.user?.startDate ? new Date(session.user.startDate) : null;
-  const endDate = session?.user?.endDate ? new Date(session.user.endDate) : null;
-  const photoUrl = session?.user?.image || "";
+  const id =
+    session?.user && "internID" in session.user
+      ? (session.user as { internID?: string }).internID || "N/A"
+      : "N/A";
+  const startDate =
+    session?.user && "startDate" in session.user && session.user.startDate
+      ? new Date((session.user as { startDate?: string }).startDate as string)
+      : null;
+  const endDate =
+    session?.user && "endDate" in session.user && session.user.endDate
+      ? new Date((session.user as { endDate?: string }).endDate as string)
+      : null;
+  const photoUrl =
+    session?.user && "image" in session.user
+      ? (session.user as { image?: string }).image || ""
+      : "";
 
   const formatDate = (date: Date | null) =>
     date ? date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" }) : "N/A";

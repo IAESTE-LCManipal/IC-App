@@ -7,11 +7,13 @@ import { useSession } from "next-auth/react";
 export default function Essentials({
   onItemClick
 }: {
-  onItemClick: (item: { title: string; description: string; hidden: string }) => void;
+  onItemClick: (item: { title: string; description: string; hidden?: string }) => void;
 }) {
   const { data: session } = useSession();
 
-  const professor = session?.user?.professorDetails;
+  const professor = (session?.user && 'professorDetails' in session.user)
+    ? (session.user as { professorDetails?: { name?: string; contact?: string; email?: string } }).professorDetails
+    : undefined;
   const essentials = [
     {
       title: "Wifi Password",
@@ -23,7 +25,7 @@ export default function Essentials({
       description: "Professor's Contact",
       hidden: `Phone: ${professor.contact}\nEmail: ${professor.email}`,
     },
-  ].filter(Boolean); // removes undefined if professor is null
+  ].filter(Boolean) as { title: string; description: string; hidden?: string }[];
 
   return (
     <div className="max-w-5xl mx-auto px-8">
