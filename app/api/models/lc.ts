@@ -1,5 +1,5 @@
 // api/models/lc.ts
-import mongoose, { Schema, Document, Types } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 import { hash } from 'bcryptjs';
 
 export interface ILC extends Document {
