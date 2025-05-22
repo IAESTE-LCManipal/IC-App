@@ -1,11 +1,11 @@
 //api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcryptjs";
-import dbConnect from "@/lib/db/mongoose";
-import Intern from "@/app/api/models/intern";
-import LC from "@/app/api/models/lc";
-import Admin from "@/app/api/models/admin";
+// import CredentialsProvider from "next-auth/providers/credentials";
+// import { compare } from "bcryptjs";
+// import dbConnect from "@/lib/db/mongoose";
+// import Intern from "@/app/api/models/intern";
+// import LC from "@/app/api/models/lc";
+// import Admin from "@/app/api/models/admin";
 import { authOptions } from "../authOptions";
 
 // Define separate types for each user role
