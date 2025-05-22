@@ -1,5 +1,5 @@
 import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 // This part handles unauthenticated users
@@ -10,7 +10,7 @@ export default withAuth({
 });
 
 // role-based protection
-export async function middleware(request: any) {
+export async function middleware(request: NextRequest) {
   // This gets the JWT token (works for both secure and non-secure cookies)
   const token =
     request.cookies.get("next-auth.session-token")?.value ||

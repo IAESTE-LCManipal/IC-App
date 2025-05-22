@@ -5,12 +5,31 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import { useSession } from "next-auth/react";
 
-export function InternCards() {
+// Define the Intern and Professor types
+interface Professor {
+  name: string;
+  email: string;
+  contact: string;
+}
+
+interface Intern {
+  _id: string;
+  fullName: string;
+  internID: string;
+  sroSlot: string;
+  photoUrl?: string;
+  startDate?: string;
+  endDate?: string;
+  professorDetails?: Professor;
+  [key: string]: any;
+}
+
+export default function InternCards() {
   const { data: session } = useSession();
-  const [interns, setInterns] = useState<any[]>([]);
+  const [interns, setInterns] = useState<Intern[]>([]);
   const [loading, setLoading] = useState(true);
-  const [active, setActive] = useState<any | boolean | null>(null);
-  const [profModal, setProfModal] = useState<any | null>(null);
+  const [active, setActive] = useState<Intern | boolean | null>(null);
+  const [profModal, setProfModal] = useState<Professor | null>(null);
   const id = useId();
   const ref = useRef<HTMLDivElement>(null!);
 
@@ -28,7 +47,7 @@ export function InternCards() {
       });
       const json = await res.json();
       // Sort interns by sroSlot (as number)
-      const sorted = (json.data || []).slice().sort((a: any, b: any) => {
+      const sorted = (json.data || []).slice().sort((a: Intern, b: Intern) => {
         const aSlot = Number(a.sroSlot);
         const bSlot = Number(b.sroSlot);
         return aSlot - bSlot;
@@ -139,7 +158,7 @@ export function InternCards() {
                   {/* Green professor name div, clickable */}
                   <button
                     className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white focus:outline-none focus:ring-2 focus:ring-green-700"
-                    onClick={() => setProfModal(active.professorDetails)}
+                    onClick={() => setProfModal(active.professorDetails ?? null)}
                     type="button"
                   >
                     {active.professorDetails?.name}
@@ -198,10 +217,7 @@ export function InternCards() {
               className="m-2 p-[0.7rem] flex flex-col rounded-xl cursor-pointer transition-colors duration-200 border-[3px] border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 shadow-sm"
             >
               <div className="flex gap-4 flex-col w-full rounded-xl p-4">
-                <motion.div
-                  layoutId={`image-${intern.fullName}-${id}`}
-                //   className="bg-muted dark:bg-muted"
-                >
+                <motion.div layoutId={`image-${intern.fullName}-${id}`}>
                   <img
                     width={100}
                     height={100}
@@ -231,7 +247,7 @@ export function InternCards() {
                       className="mt-2 px-4 py-2 text-xs rounded-full font-bold bg-green-500 text-white focus:outline-none focus:ring-2 focus:ring-green-700"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setProfModal(intern.professorDetails);
+                        setProfModal(intern.professorDetails ?? null);
                       }}
                       type="button"
                     >

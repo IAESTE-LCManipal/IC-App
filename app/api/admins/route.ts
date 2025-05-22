@@ -33,13 +33,14 @@ export async function POST(request: Request) {
       success: true,
       data: adminWithoutPassword
     }, { status: 201 });
-  } catch (error: any) {
-    console.error('API error:', error);
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error('API error:', err);
     return NextResponse.json({
       success: false,
-      error: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
-    }, { status: error.status || 400 });
+      error: err.message,
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    }, { status: 400 });
   }
 }
 
@@ -48,7 +49,7 @@ export async function GET() {
     await dbConnect();
     const admins = await Admin.find({}).select('-password');
     return NextResponse.json({ success: true, data: admins });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    return NextResponse.json({ success: false, error: (error as Error).message }, { status: 400 });
   }
 }

@@ -24,11 +24,12 @@ export async function POST(request: Request) {
       success: true,
       data: interns
     });
-  } catch (error: any) {
-    console.error("API error:", error);
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error("API error:", err);
     return NextResponse.json({
       success: false,
-      error: error.message
+      error: err.message
     }, { status: 400 });
   }
 }

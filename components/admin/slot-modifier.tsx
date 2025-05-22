@@ -56,8 +56,8 @@ export default function SlotModifier() {
       if (!data.success) throw new Error(data.error || "Failed to create slot");
       setNewSlot({ slotNumber: '', from: '', to: '' });
       fetchSlots();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     }
   }
 
@@ -84,8 +84,8 @@ export default function SlotModifier() {
       setEditSlotId(null);
       setEditSlot({ slotNumber: '', from: '', to: '' });
       fetchSlots();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     }
   }
 
@@ -200,8 +200,8 @@ export default function SlotModifier() {
                       const data = await res.json();
                       if (!data.success) throw new Error(data.error || "Failed to delete slot");
                       fetchSlots();
-                    } catch (err: any) {
-                      setError(err.message);
+                    } catch (err: unknown) {
+                      setError(err instanceof Error ? err.message : 'Unknown error');
                     }
                   }}>
                     <TrashIcon className="h-4 w-4" />

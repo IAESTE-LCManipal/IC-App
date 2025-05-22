@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || (session.user as any)?.role !== 'lc') {
+    if (!session || (session.user as { role?: string })?.role !== 'lc') {
       return NextResponse.json({
         success: false,
         error: "Unauthorized"
@@ -56,11 +56,12 @@ export async function POST(request: Request) {
       data: updatedChecklist
     });
 
-  } catch (error: any) {
-    console.error("API error:", error);
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error("API error:", err);
     return NextResponse.json({
       success: false,
-      error: error.message
+      error: err.message
     }, { status: 400 });
   }
 }

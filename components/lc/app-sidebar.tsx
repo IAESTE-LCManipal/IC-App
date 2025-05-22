@@ -33,20 +33,20 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { theme } = useTheme();
-    const logoSrc = theme === "dark" ? "/iaeste_white.png" : "/iaeste.png";
+  const { theme } = useTheme();
+  const logoSrc = theme === "dark" ? "/iaeste_white.png" : "/iaeste.png";
   const { data: session } = useSession();
   // Defensive extraction for LC user fields
-  let user = data.user;
+  let user: { name: string; email: string; avatar: string } = { name: "", email: "", avatar: "" };
   let initials = "LC";
   if (
     session?.user &&
-    typeof (session.user as any).role === "string" &&
-    (session.user as any).role === "lc"
+    typeof (session.user as { role?: string }).role === "string" &&
+    (session.user as { role?: string }).role === "lc"
   ) {
-    const firstName = (session.user as any).firstName || "";
-    const lastName = (session.user as any).lastName || "";
-    const email = (session.user as any).email || "";
+    const firstName = (session.user as { firstName?: string }).firstName || "";
+    const lastName = (session.user as { lastName?: string }).lastName || "";
+    const email = (session.user as { email?: string }).email || "";
     initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase() || email.charAt(0).toUpperCase();
     user = {
       name: `${firstName} ${lastName}`.trim() || email,

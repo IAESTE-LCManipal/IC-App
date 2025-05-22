@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { AppSidebar } from "@/components/admin/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { InternCards } from "@/components/admin/intern-cards";
+import InternCards from "@/components/admin/intern-cards";
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();

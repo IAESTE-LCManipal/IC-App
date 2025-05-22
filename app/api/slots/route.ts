@@ -8,8 +8,9 @@ export async function GET() {
     await dbConnect();
     const slots = await Slot.find({});
     return NextResponse.json({ success: true, data: slots });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    return NextResponse.json({ success: false, error: err.message }, { status: 400 });
   }
 }
 
@@ -23,7 +24,8 @@ export async function POST(request: Request) {
     }
     const slot = await Slot.create({ slotNumber, from, to });
     return NextResponse.json({ success: true, data: slot }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    return NextResponse.json({ success: false, error: err.message }, { status: 400 });
   }
 }

@@ -11,6 +11,15 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+function hasSroSlot(user: unknown): user is { sroSlot: string } {
+  return (
+    typeof user === "object" &&
+    user !== null &&
+    "sroSlot" in user &&
+    typeof (user as any).sroSlot === "string"
+  )
+}
+
 export function SectionCards() {
   const { data: session } = useSession()
   const [stats, setStats] = useState({
@@ -24,8 +33,7 @@ export function SectionCards() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      // Fix: cast session.user as any to access sroSlot
-      const sroSlot = (session?.user as any)?.sroSlot
+      const sroSlot = hasSroSlot(session?.user) ? session.user.sroSlot : undefined
       if (!sroSlot) return
       setLoading(true)
       setError("")
@@ -41,8 +49,8 @@ export function SectionCards() {
         } else {
           setError(data.error || "Failed to fetch stats")
         }
-      } catch (e: any) {
-        setError(e.message || "Error fetching stats")
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Error fetching stats")
       } finally {
         setLoading(false)
       }

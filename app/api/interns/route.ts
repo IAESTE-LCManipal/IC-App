@@ -36,13 +36,14 @@ export async function POST(request: Request) {
       data: internWithoutPassword,
       plainPassword: password // Only return this during creation for admin to share with intern
     }, { status: 201 });
-  } catch (error: any) {
-    console.error("API error:", error);
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error("API error:", err);
     return NextResponse.json({
       success: false,
-      error: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
-    }, { status: error.status || 400 });
+      error: err.message,
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    }, { status: 400 });
   }
 }
 

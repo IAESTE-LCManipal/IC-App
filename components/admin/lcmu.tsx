@@ -46,7 +46,7 @@ export default function LCTablePage() {
       const res = await fetch("/api/slots");
       const json = await res.json();
       setSlots(
-        json.data?.map((slot: any) => slot.slotNumber.toString().padStart(2, "0")) || []
+        json.data?.map((slot: { slotNumber: number }) => slot.slotNumber.toString().padStart(2, "0")) || []
       );
     }
     fetchSlots();

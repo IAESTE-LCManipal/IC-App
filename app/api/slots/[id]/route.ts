@@ -11,7 +11,8 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       return NextResponse.json({ success: false, error: 'Slot not found' }, { status: 404 });
     }
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

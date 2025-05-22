@@ -20,13 +20,13 @@ export async function POST() {
     const slotNumberStr = slot.slotNumber.toString().padStart(2, "0");
     // Get all interns in this slot
     const interns = await Intern.find({ sroSlot: slotNumberStr });
-    const internIDs = interns.map((i: any) => i.internID);
+    const internIDs = interns.map((i: unknown) => (i as { internID: string }).internID);
     // Get all checklists for these interns
     const checklists = await SROChecklist.find({ internID: { $in: internIDs } });
     // Count completed SRO checklists (all fields true)
-    const completedSRO = checklists.filter((c: any) => c.checklist && Object.values(c.checklist).every(Boolean)).length;
+    const completedSRO = checklists.filter((c: { checklist: Record<string, boolean> }) => c.checklist && Object.values(c.checklist).every(Boolean)).length;
     // Count interns with 0 checklist items completed (all fields false or checklist missing)
-    const zeroCompleted = checklists.filter((c: any) => !c.checklist || Object.values(c.checklist).every(v => !v)).length;
+    const zeroCompleted = checklists.filter((c: { checklist: Record<string, boolean> }) => !c.checklist || Object.values(c.checklist).every(v => !v)).length;
     // Count LCs in this slot
     const lcsInSlot = await LC.countDocuments({ sroSlot: slotNumberStr });
     return NextResponse.json({
@@ -39,7 +39,8 @@ export async function POST() {
         slotNumber: slotNumberStr,
       },
     });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

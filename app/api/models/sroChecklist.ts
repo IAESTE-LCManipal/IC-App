@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface ISROChecklist extends Document {
   internID: string; // Reference to Intern's internID
-  checklist: any; // You can define a more specific type if you know the structure
+  checklist: Record<string, boolean>; // Specify checklist as a record of boolean values
   updatedAt: Date;
 }
 

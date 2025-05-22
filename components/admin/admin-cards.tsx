@@ -33,11 +33,11 @@ export function SectionCards() {
             error: data.error || "Failed to fetch stats",
           }))
         }
-      } catch (e) {
+      } catch (e: unknown) {
         setStats((s) => ({
           ...s,
           loading: false,
-          error: (e as any).message || "Error fetching stats",
+          error: e instanceof Error ? e.message : "Error fetching stats",
         }))
       }
     }

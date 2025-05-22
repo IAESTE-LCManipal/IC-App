@@ -1,9 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+// Define the Intern type
+interface Professor {
+  name: string;
+  email: string;
+  contact: string;
+}
+
+interface Intern {
+  _id: string;
+  fullName: string;
+  internID: string;
+  sroSlot: string;
+  photoUrl?: string;
+  professorDetails?: Professor;
+}
+
 export function InternsInCurrentSlot() {
   const [slot, setSlot] = useState<string | null>(null);
-  const [interns, setInterns] = useState<any[]>([]);
+  const [interns, setInterns] = useState<Intern[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,10 +30,14 @@ export function InternsInCurrentSlot() {
       const now = new Date();
       // IST is UTC+5:30
       const nowIST = new Date(now.getTime() + 5.5 * 60 * 60 * 1000);
-      const current = slots.find((slot: any) => {
+      function isSlot(obj: unknown): obj is { from: string; to: string; slotNumber: number } {
+        return typeof obj === 'object' && obj !== null && 'from' in obj && 'to' in obj && 'slotNumber' in obj;
+      }
+      const current = slots.find((slot: unknown) => {
+        if (!isSlot(slot)) return false;
         return new Date(slot.from) <= nowIST && nowIST <= new Date(slot.to);
       });
-      if (current) setSlot(current.slotNumber.toString().padStart(2, "0"));
+      if (current && isSlot(current)) setSlot(current.slotNumber.toString().padStart(2, "0"));
       else setSlot(null);
     }
     fetchCurrentSlot();

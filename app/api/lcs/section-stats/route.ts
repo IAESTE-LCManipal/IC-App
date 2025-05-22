@@ -19,25 +19,25 @@ export async function POST(request: Request) {
 
     // Get all interns in this SRO slot
     const interns = await Intern.find({ sroSlot });
-    const internIDs = interns.map((i: any) => i.internID);
+    const internIDs = interns.map((i: { internID: string }) => i.internID);
 
     // Get all checklists for these interns
     const checklists = await SROChecklist.find({ internID: { $in: internIDs } });
 
     // Count completed SRO checklists (all fields true)
-    const completedSRO = checklists.filter((c: any) => {
+    const completedSRO = checklists.filter((c: { checklist: Record<string, boolean> }) => {
       if (!c.checklist) return false;
       return Object.values(c.checklist).every(Boolean);
     }).length;
 
     // Count interns with any checklist (at least one field true)
-    const completedAny = checklists.filter((c: any) => {
+    const completedAny = checklists.filter((c: { checklist: Record<string, boolean> }) => {
       if (!c.checklist) return false;
       return Object.values(c.checklist).some(Boolean);
     }).length;
 
     // Count interns with 0 checklist items completed (all fields false or checklist missing)
-    const zeroCompleted = checklists.filter((c: any) => {
+    const zeroCompleted = checklists.filter((c: { checklist: Record<string, boolean> }) => {
       if (!c.checklist) return true;
       return Object.values(c.checklist).every(v => !v);
     }).length;
@@ -51,10 +51,11 @@ export async function POST(request: Request) {
         zeroCompleted,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
     return NextResponse.json({
       success: false,
-      error: error.message,
+      error: err.message,
     }, { status: 500 });
   }
 }
