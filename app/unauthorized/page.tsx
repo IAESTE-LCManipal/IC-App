@@ -13,7 +13,7 @@ export default function Unauthorized() {
   // Determine redirect path based on role
   useEffect(() => {
     if (status === 'authenticated') {
-      if (session?.user?.role === 'lc') setRedirectPath('/lc-dashboard');
+      if (session?.user && 'role' in session.user && session.user.role === 'lc') setRedirectPath('/lc-dashboard');
       else setRedirectPath('/dashboard');
     }
   }, [session, status]);
