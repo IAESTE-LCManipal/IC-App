@@ -18,6 +18,9 @@ export interface IIntern extends Document {
   sroSlot: string; // Added sroSlot field
   professorDetails: IProfessorDetails;
   role: 'intern';
+  offerNumber: string; // New field
+  passport: string; // New field
+  countryOfOrigin: string; // New field
 }
 
 const ProfessorDetailsSchema = new Schema<IProfessorDetails>({
@@ -45,7 +48,10 @@ const InternSchema = new Schema<IIntern>({
   endDate: { type: Date, required: true },
   sroSlot: { type: String, match: /^[0-9]{2}$/, required: true },
   professorDetails: { type: ProfessorDetailsSchema, required: true },
-  role: { type: String, enum: ['intern'], default: 'intern', required: true }
+  role: { type: String, enum: ['intern'], default: 'intern', required: true },
+  offerNumber: { type: String, required: true }, // New field
+  passport: { type: String, required: true }, // New field
+  countryOfOrigin: { type: String, required: true } // New field
 });
 
 // Hash password before saving

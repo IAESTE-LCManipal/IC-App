@@ -21,6 +21,9 @@ interface Intern {
   professorDetails?: Professor;
   startDate?: string;
   endDate?: string;
+  offerNumber?: string;
+  passport?: string;
+  countryOfOrigin?: string;
 }
 
 export default function InternCards() {
@@ -28,6 +31,9 @@ export default function InternCards() {
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState<Intern | boolean | null>(null);
   const [profModal, setProfModal] = useState<Professor | null>(null);
+  const [sroStatus, setSroStatus] = useState<
+    "completed" | "ongoing" | "not started" | null
+  >(null);
   const id = useId();
 
   // Separate refs for intern and professor modals
@@ -79,6 +85,30 @@ export default function InternCards() {
 
   useOutsideClick(internModalRef, () => setActive(null));
   useOutsideClick(profModalRef, () => setProfModal(null));
+
+  // Fetch SRO checklist status when modal opens
+  useEffect(() => {
+    async function fetchSROStatus() {
+      if (active && typeof active === "object") {
+        try {
+          const res = await fetch(
+            `/api/interns/sro-checklist-status?internID=${active.internID}`
+          );
+          const data = await res.json();
+          if (data.success) {
+            setSroStatus(data.status);
+          } else {
+            setSroStatus(null);
+          }
+        } catch {
+          setSroStatus(null);
+        }
+      } else {
+        setSroStatus(null);
+      }
+    }
+    fetchSROStatus();
+  }, [active]);
 
   return (
     <>
@@ -162,6 +192,23 @@ export default function InternCards() {
                     {active.professorDetails?.name}
                   </button>
                 </div>
+                {/* SRO Checklist Status */}
+                {sroStatus && (
+                  <div className="px-4 pb-4">
+                    <span className="font-semibold">SRO Checklist Status: </span>
+                    <span
+                      className={
+                        sroStatus === "completed"
+                          ? "text-green-600"
+                          : sroStatus === "ongoing"
+                          ? "text-yellow-600"
+                          : "text-gray-500"
+                      }
+                    >
+                      {sroStatus.charAt(0).toUpperCase() + sroStatus.slice(1)}
+                    </span>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>
@@ -236,7 +283,7 @@ export default function InternCards() {
                     layoutId={`description-${intern.internID}-${id}`}
                     className="text-neutral-600 dark:text-neutral-400 text-center md:text-left text-base"
                   >
-                    Country of Origin: {intern.internID}
+                    Country of Origin: {intern.countryOfOrigin || "-"}
                     <br />
                     SRO Slot: {intern.sroSlot}
                   </motion.p>

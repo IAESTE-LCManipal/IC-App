@@ -1,7 +1,7 @@
 // components/lc/SROChecklistModal.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,6 +29,52 @@ export function SROChecklistModal({ isOpen, onClose, internId, internName }: SRO
     idCard: false,
     wifiAccess: false,
   });
+
+  // Fetch checklist from DB when modal opens or internId changes
+  useEffect(() => {
+    async function fetchChecklist() {
+      if (!isOpen || !internId) return;
+      try {
+        const res = await fetch(`/api/interns/sro-checklist?internId=${internId}`);
+        const data = await res.json();
+        if (data.success && data.checklist) {
+          setChecklist({ ...checklist, ...data.checklist });
+        } else {
+          setChecklist({
+            oiacIntimation: false,
+            accomodationMail: false,
+            cabMail: false,
+            ci: false,
+            cForm: false,
+            sForm: false,
+            frroIfRequired: false,
+            bonafideCertificate: false,
+            stipend: false,
+            hostelUndertaking: false,
+            idCard: false,
+            wifiAccess: false,
+          });
+        }
+      } catch {
+        setChecklist({
+          oiacIntimation: false,
+          accomodationMail: false,
+          cabMail: false,
+          ci: false,
+          cForm: false,
+          sForm: false,
+          frroIfRequired: false,
+          bonafideCertificate: false,
+          stipend: false,
+          hostelUndertaking: false,
+          idCard: false,
+          wifiAccess: false,
+        });
+      }
+    }
+    fetchChecklist();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, internId]);
 
   const handleSave = async () => {
     try {

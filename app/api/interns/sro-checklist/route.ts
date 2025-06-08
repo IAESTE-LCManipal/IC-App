@@ -65,3 +65,28 @@ export async function POST(request: Request) {
     }, { status: 400 });
   }
 }
+
+export async function GET(request: Request) {
+  try {
+    const url = new URL(request.url);
+    const internId = url.searchParams.get("internId");
+    if (!internId) {
+      return NextResponse.json({ success: false, error: "Intern ID is required" }, { status: 400 });
+    }
+    await dbConnect();
+    // Find intern by _id to get internID string
+    const intern = await Intern.findById(internId);
+    if (!intern) {
+      return NextResponse.json({ success: false, error: "Intern not found" }, { status: 404 });
+    }
+    // Find checklist by internID string
+    const checklistDoc = await SROChecklist.findOne({ internID: intern.internID });
+    if (!checklistDoc) {
+      return NextResponse.json({ success: true, checklist: null });
+    }
+    return NextResponse.json({ success: true, checklist: checklistDoc.checklist });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    return NextResponse.json({ success: false, error: err.message }, { status: 400 });
+  }
+}

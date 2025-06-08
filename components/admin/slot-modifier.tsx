@@ -56,7 +56,7 @@ export default function SlotModifier() {
       if (!data.success) throw new Error(data.error || "Failed to create slot");
       setNewSlot({ slotNumber: '', from: '', to: '' });
       fetchSlots();
-    } catch (err: unknown) {
+        } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     }
   }
@@ -120,11 +120,11 @@ export default function SlotModifier() {
   }
 
   return (
-    <div className="flex items-center flex-col gap-4">
-      <Card className="sm:w-[60%] md:w-[50%] bg-muted/50 border-2 border-dashed border-primary">
-        <CardContent className="py-4 flex justify-center flex-col gap-2">
-          <h2 className="flex sm:justify-center lg:justify-normal font-semibold text-lg mb-2">Create New Slot</h2>
-          <form className="flex flex-col md:flex-row gap-2 items-center" onSubmit={handleCreateSlot}>
+    <div className="flex flex-col items-center gap-4 w-full px-2 sm:px-4 md:px-8">
+      <Card className="w-full max-w-xl bg-muted/50 border-2 border-dashed border-primary">
+        <CardContent className="py-4 flex flex-col gap-2">
+          <h2 className="flex justify-center font-semibold text-lg mb-2">Create New Slot</h2>
+          <form className="flex flex-col md:flex-row gap-2 w-full items-center" onSubmit={handleCreateSlot}>
             <Input
               type="number"
               min={1}
@@ -133,7 +133,7 @@ export default function SlotModifier() {
               placeholder="Slot No."
               value={newSlot.slotNumber}
               onChange={e => setNewSlot(s => ({ ...s, slotNumber: e.target.value }))}
-              className="sm:w-32 md:w-48"
+              className="w-full max-w-[120px] md:w-32"
             />
             <div className="w-full">
               <DatePickerWithRange
@@ -147,7 +147,7 @@ export default function SlotModifier() {
                 format="dd/MM/yyyy"
               />
             </div>
-            <Button type="submit" variant="default">Create</Button>
+            <Button type="submit" variant="default" className="w-full max-w-[100px] md:w-auto md:ml-2 whitespace-nowrap">Create</Button>
           </form>
           {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
         </CardContent>
@@ -189,7 +189,7 @@ export default function SlotModifier() {
               <div className="flex flex-col md:flex-row gap-2 items-center w-full justify-between">
                 <div className="flex flex-col md:flex-row gap-4 items-center">
                   <span className="font-semibold">Slot {slot.slotNumber}</span>
-                  <span className="text-sm text-muted-foreground">{new Date(slot.from).toLocaleString()} - {new Date(slot.to).toLocaleString()}</span>
+                  <span className="text-sm text-muted-foreground">{new Date(slot.from).toLocaleDateString()} - {new Date(slot.to).toLocaleDateString()}</span>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" onClick={() => startEdit(slot)}>Edit</Button>

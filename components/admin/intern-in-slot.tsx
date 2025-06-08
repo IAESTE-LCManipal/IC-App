@@ -16,6 +16,9 @@ interface Intern {
   sroSlot: string;
   photoUrl?: string;
   professorDetails?: Professor;
+  offerNumber?: string;
+  passport?: string;
+  countryOfOrigin?: string;
 }
 
 export function InternsInCurrentSlot() {
@@ -98,7 +101,7 @@ export function InternsInCurrentSlot() {
                     layoutId={`description-${intern.internID}-${intern._id}`}
                     className="text-neutral-600 dark:text-neutral-400 text-center md:text-left text-base"
                   >
-                    Country of Origin: {intern.internID}
+                    Country of Origin: {intern.countryOfOrigin || "-"}
                     <br />
                     SRO Slot: {intern.sroSlot}
                   </motion.p>
