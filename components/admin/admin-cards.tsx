@@ -1,28 +1,39 @@
+"use client"
+import { useEffect, useState } from "react"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-export async function SectionCards() {
-  let stats = {
+export function SectionCards() {
+  const [stats, setStats] = useState({
     totalInterns: "—",
     completedSRO: "—",
     zeroCompleted: "—",
     lcsInSlot: "—",
     slotNumber: null,
     error: "",
-  }
-  try {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL + "/api/admins/section-stats",
-      { method: "POST", cache: "no-store" }
-    )
-    const data = await res.json()
-    if (data.success) {
-      stats = { ...stats, ...data.stats }
-    } else {
-      stats.error = data.error || "Failed to fetch stats"
+  })
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const res = await fetch(
+          "/api/admins/section-stats",
+          { method: "POST", cache: "no-store" }
+        )
+        const data = await res.json()
+        if (data.success) {
+          setStats((prev) => ({ ...prev, ...data.stats, error: "" }))
+        } else {
+          setStats((prev) => ({
+            ...prev,
+            error: data.error || "Failed to fetch stats",
+          }))
+        }
+      } catch (e) {
+        setStats((prev) => ({ ...prev, error: "Error fetching stats" }))
+      }
     }
-  } catch (e) {
-    stats.error = "Error fetching stats"
-  }
+    fetchStats()
+  }, [])
 
   if (stats.error)
     return (
