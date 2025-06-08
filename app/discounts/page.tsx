@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
-import DiscountsDialog from "@/components/intern/discountsblock";
 import InternSidebar from "@/components/intern/internsidebar";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+const DynamicDiscountsDialog = dynamic(() => import("@/components/intern/discountsblock"), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />,
+});
 
 export default function Discounts() {
         const { data: session, status } = useSession();
@@ -33,12 +39,14 @@ export default function Discounts() {
         <div
         className={cn(
             "mx-auto flex w-full max-w-screen flex-1 flex-col overflow-auto rounded-md border border-neutral-200 bg-[#101827] md:flex-row dark:border-neutral-700 dark:bg-neutral-800",
-            "h-screen", // for your use case, use `h-screen` instead of `h-[60vh]`
+            "h-screen"
         )}
         >
             <InternSidebar />
             <div className="flex h-full w-full flex-1 flex-col gap-2  border-0 bg-neutral-900">
-                <DiscountsDialog />
+                <Suspense fallback={<Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />}>
+                  <DynamicDiscountsDialog />
+                </Suspense>
             </div>
         </div>
         </>

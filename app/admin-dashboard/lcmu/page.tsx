@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import { AppSidebar } from "@/components/admin/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import LCTablePage from "@/components/admin/lcmu";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const DynamicLCTablePage = dynamic(() => import("@/components/admin/lcmu"), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-40 rounded-lg bg-neutral-800" />,
+});
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
@@ -41,7 +47,9 @@ export default function AdminDashboard() {
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <LCTablePage />
+              <Suspense fallback={<Skeleton className="w-full h-40 rounded-lg bg-neutral-800" />}>
+                <DynamicLCTablePage />
+              </Suspense>
             </div>
           </div>
         </div>

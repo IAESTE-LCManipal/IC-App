@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Unauthorized() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -180,38 +181,40 @@ export default function Unauthorized() {
   // Overlay content
   return (
     <div className="fixed inset-0 bg-black flex items-center justify-center z-0">
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 w-full h-full pointer-events-none select-none"
-        style={{ display: 'block' }}
-      />
-      <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none">
-        <h1
-          className="text-white text-[min(16vw,120px)] font-mono font-extrabold drop-shadow-[0_0_24px_white] leading-none tracking-widest mb-4"
-          style={{
-            textShadow: '0 0 18px #fff, 0 0 8px #fff',
-            fontFamily: 'monospace, monospace',
-            filter: 'brightness(1.4)',
-            letterSpacing: '0.02em',
-          }}
-        >
-          Unauthorized
-        </h1>
-        <p className="text-white text-2xl md:text-3xl font-semibold mb-6 text-center drop-shadow-[0_0_8px_black] pointer-events-auto">
-          Looks like you missed the ball.
-        </p>
-        <button
-          className="pointer-events-auto border-2 bg-zinc-900 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-zinc-800 transition text-lg
-            relative before:absolute before:inset-0 before:rounded-full before:blur-[8px] before:bg-white/70 before:opacity-60 before:z-[-1]"
-          style={{
-            boxShadow: '0 0 10px 4px #fff, 0 0 3px 1px #fff',
-            borderColor: '#fff',
-          }}
-          onClick={() => router.push(redirectPath)}
-        >
-          Home
-        </button>
-      </div>
+      <Suspense fallback={<Skeleton className="w-full h-screen bg-black" />}>
+        <canvas
+          ref={canvasRef}
+          className="fixed inset-0 w-full h-full pointer-events-none select-none"
+          style={{ display: 'block' }}
+        />
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none">
+          <h1
+            className="text-white text-[min(16vw,120px)] font-mono font-extrabold drop-shadow-[0_0_24px_white] leading-none tracking-widest mb-4"
+            style={{
+              textShadow: '0 0 18px #fff, 0 0 8px #fff',
+              fontFamily: 'monospace, monospace',
+              filter: 'brightness(1.4)',
+              letterSpacing: '0.02em',
+            }}
+          >
+            Unauthorized
+          </h1>
+          <p className="text-white text-2xl md:text-3xl font-semibold mb-6 text-center drop-shadow-[0_0_8px_black] pointer-events-auto">
+            Looks like you missed the ball.
+          </p>
+          <button
+            className="pointer-events-auto border-2 bg-zinc-900 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-zinc-800 transition text-lg
+              relative before:absolute before:inset-0 before:rounded-full before:blur-[8px] before:bg-white/70 before:opacity-60 before:z-[-1]"
+            style={{
+              boxShadow: '0 0 10px 4px #fff, 0 0 3px 1px #fff',
+              borderColor: '#fff',
+            }}
+            onClick={() => router.push(redirectPath)}
+          >
+            Home
+          </button>
+        </div>
+      </Suspense>
     </div>
   );
 }

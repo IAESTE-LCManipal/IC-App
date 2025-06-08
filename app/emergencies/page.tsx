@@ -1,13 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
+import dynamic from "next/dynamic";
 
 import { cn } from "@/lib/utils";
-import Emergency from "../../components/intern/emergency";
 import InternSidebar from "../../components/intern/internsidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+const DynamicEmergency = dynamic(() => import("../../components/intern/emergency"), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />,
+});
 
 export default function Emergencies() {
     const { data: session, status } = useSession();
@@ -34,12 +39,14 @@ export default function Emergencies() {
         <div
         className={cn(
             "mx-auto flex w-full max-w-screen flex-1 flex-col overflow-auto rounded-md border border-neutral-200 bg-[#101827] md:flex-row dark:border-neutral-700 dark:bg-neutral-800",
-             "h-screen", // for your use case, use `h-screen` instead of `h-[60vh]`
+             "h-screen"
         )}
         >
             <InternSidebar />
             <div className="flex h-full w-full flex-1 flex-col gap-2  border-0 bg-neutral-900">
-                <Emergency />
+                <Suspense fallback={<Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />}>
+                  <DynamicEmergency />
+                </Suspense>
             </div>
         </div>
         </>

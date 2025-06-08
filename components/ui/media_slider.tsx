@@ -149,57 +149,62 @@ export default function NearbyCarousel({ items }: { items: CarouselItem[] }) {
         onTouchEnd={handleTouchEnd}
       >
         <div className="list" ref={sliderRef}>
-          {items.map((item) => (
-            <div key={item.id} className="item">
+          {items.map((item, idx) => (
+            <div
+              key={item.id}
+              className="item relative w-full h-full"
+            >
               <Image
                 src={item.image}
                 alt={item.title}
                 width={1920}
                 height={1080}
-                priority={true}
+                priority={idx === 0}
+                loading={idx === 0 ? undefined : 'lazy'}
+                className="w-full h-full object-cover rounded-lg"
               />
-              <div className="content">
-                <div className="author">AROUND MANIPAL</div>
-                <div className="title">{item.subtitle}</div>
-                <div className="topic">{item.title}</div>
-                <div className="des">{item.description}</div>
-                <div className="buttons">
-                  <button>SEE MORE</button>
+              <div className="content absolute top-1/4 w-full max-w-[90vw] left-1/2 -translate-x-1/2 pr-0 box-border text-white drop-shadow-lg text-shadow-lg">
+                <div className="author font-bold tracking-widest text-xs md:text-base">AROUND MANIPAL</div>
+                <div className="title text-2xl md:text-4xl font-bold leading-tight">{item.subtitle}</div>
+                <div className="topic text-2xl md:text-4xl font-bold leading-tight text-pink-500">{item.title}</div>
+                <div className="des mt-2">{item.description}</div>
+                <div className="buttons grid grid-cols-2 gap-2 mt-4">
+                  <button className="rounded-lg bg-neutral-700 font-medium tracking-wider font-sans">SEE MORE</button>
                   {item.discover ? (
                     <Link href={item.discover} className="discover-link">
-                      <button className="discover-button">DISCOVER</button>
+                      <button className="rounded-lg bg-transparent border border-white text-neutral-100 font-medium tracking-wider font-sans">DISCOVER</button>
                     </Link>
                   ) : (
-                    <button>DISCOVER</button>
+                    <button className="rounded-lg bg-transparent border border-white text-neutral-100 font-medium tracking-wider font-sans">DISCOVER</button>
                   )}
                 </div>
               </div>
             </div>
           ))}
         </div>
-
-        <div className="thumbnail" ref={thumbnailRef}>
-          {items.map((item) => (
-            <div key={item.id} className="item">
+        <div className="thumbnail absolute bottom-12 left-1/2 z-10 flex gap-4" style={{transform: 'translateX(-50%)'}} ref={thumbnailRef}>
+          {items.map((item, idx) => (
+            <div key={item.id} className="item w-24 h-36 flex-shrink-0 relative">
               <Image
                 src={item.image}
                 alt={item.title}
                 width={150}
                 height={220}
+                priority={idx === 0}
+                loading={idx === 0 ? undefined : 'lazy'}
+                className="w-full h-full object-cover rounded-xl"
               />
-              <div className="content">
-                <div className="description">{item.subtitle}</div>
-                <div className="title">{item.title}</div>
+              <div className="content text-white absolute bottom-2 left-2 right-2">
+                <div className="description font-light">{item.subtitle}</div>
+                <div className="title font-medium">{item.title}</div>
               </div>
             </div>
           ))}
         </div>
-
-        <div className="arrows">
-          <button id="prev" onClick={() => showSlider('prev')}>&lt;</button>
-          <button id="next" onClick={() => showSlider('next')}>&gt;</button>
+        <div className="arrows absolute top-[80%] right-1/2 z-10 flex gap-2 items-center w-72 max-w-[30%]" style={{transform: 'translateX(50%)'}}>
+          <button className="w-10 h-10 rounded-full bg-white/25 border-none text-white font-mono font-bold transition duration-500 hover:bg-white hover:text-black" id="prev" onClick={() => showSlider('prev')}>&lt;</button>
+          <button className="w-10 h-10 rounded-full bg-white/25 border-none text-white font-mono font-bold transition duration-500 hover:bg-white hover:text-black" id="next" onClick={() => showSlider('next')}>&gt;</button>
         </div>
-
         <div className="time"></div>
       </div>
     </div>

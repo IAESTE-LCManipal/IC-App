@@ -29,15 +29,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-        <body
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#101827" />
+        <link rel="manifest" href="/manifest.json" />
+        {/* Add other SEO/meta tags as needed */}
+      </head>
+      <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-auto`}
-      ><ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-        <ClientProvider>{children}</ClientProvider>
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ClientProvider>{children}</ClientProvider>
         </ThemeProvider>
       </body>
     </html>

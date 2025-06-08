@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import { AppSidebar } from "@/components/admin/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import SlotModifier from "@/components/admin/slot-modifier";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const DynamicSlotModifier = dynamic(() => import("@/components/admin/slot-modifier"), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-40 rounded-lg bg-neutral-800" />,
+});
 
 function hasRole(user: unknown): user is { role: string } {
   return typeof user === 'object' && user !== null && 'role' in user && typeof (user as { role?: unknown }).role === 'string';
@@ -43,7 +49,9 @@ export default function AdminDashboard() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <h1 className="flex justify-center text-xl sm:text-2xl md:text-3xl font-bold mb-4 ml-4">SRO Slots</h1>
               <div className="px-4 lg:px-6">
-                <SlotModifier />
+                <Suspense fallback={<Skeleton className="w-full h-40 rounded-lg bg-neutral-800" />}>
+                  <DynamicSlotModifier />
+                </Suspense>
               </div>
             </div>
           </div>

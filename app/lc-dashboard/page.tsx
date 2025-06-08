@@ -1,15 +1,14 @@
 //app/lc-dashboard/page.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import { AppSidebar } from "@/components/lc/app-sidebar";
-// import { DataTable } from "@/components/data-table";
-import { SectionCards } from "@/components/lc/lc-cards";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { InternTable } from "@/components/lc/InternTable";
 import { SROChecklistModal } from "@/components/lc/SROChecklistModal";
 
 // Define a User type for role checks
@@ -34,6 +33,16 @@ function isLCUser(user: User): user is { role: string; sroSlot: string } {
     typeof (user as { sroSlot?: unknown }).sroSlot === "string"
   );
 }
+
+// Fix dynamic import for named exports
+const DynamicSectionCards = dynamic(() => import("@/components/lc/lc-cards").then(mod => mod.SectionCards), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-40 rounded-lg bg-neutral-800" />,
+});
+const DynamicInternTable = dynamic(() => import("@/components/lc/InternTable").then(mod => mod.InternTable), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />,
+});
 
 export default function Dashboard() {
     const { data: session, status } = useSession();
@@ -80,12 +89,16 @@ export default function Dashboard() {
             <div className="flex flex-1 flex-col">
                 <div className="@container/main flex flex-1 flex-col gap-2">
                 <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                    <SectionCards />
+                    <Suspense fallback={<Skeleton className="w-full h-40 rounded-lg bg-neutral-800" />}>
+                      <DynamicSectionCards />
+                    </Suspense>
                     <div className="px-4 lg:px-6">
                         <h3 className="text-xl font-semibold mb-4 flex justify-center">
                             Interns in SRO Slot {session.user.sroSlot}
                         </h3>
-                        <InternTable onOpenChecklist={handleOpenChecklist} />
+                        <Suspense fallback={<Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />}>
+                          <DynamicInternTable onOpenChecklist={handleOpenChecklist} />
+                        </Suspense>
                     </div>
                 </div>
                 </div>

@@ -1,11 +1,17 @@
 "use client";
-import React, {useEffect} from "react";
+import React, {useEffect, Suspense} from "react";
 import { cn } from "@/lib/utils";
 import InternSidebar from "@/components/intern/internsidebar";
-import Dash from "../../components/intern/interndash";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const DynamicDash = dynamic(() => import("../../components/intern/interndash"), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />,
+});
 
 export default function Dashboard() {
     const { data: session, status } = useSession();
@@ -37,7 +43,9 @@ export default function Dashboard() {
         >
             <InternSidebar />
             <div className="flex h-full w-full flex-1 flex-col gap-2 border-0 bg-neutral-900">
-                <Dash />
+                <Suspense fallback={<Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />}>
+                  <DynamicDash />
+                </Suspense>
             </div>
         </div>
     </>

@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
 
 import InternSidebar from "@/components/intern/internsidebar";
-import NearbyCarousel from "@/components/ui/media_slider";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+const DynamicNearbyCarousel = dynamic(() => import("@/components/ui/media_slider"), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />,
+});
 
 export default function Dashboard() {
     const { data: session, status } = useSession();
@@ -71,7 +77,9 @@ export default function Dashboard() {
             >
                 <InternSidebar />
                 <div className="flex h-full w-full flex-1 flex-col gap-2 border-0 bg-neutral-900">
-                    <NearbyCarousel items={carouselItems} />
+                    <Suspense fallback={<Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />}>
+                      <DynamicNearbyCarousel items={carouselItems} />
+                    </Suspense>
                 </div>
             </div>
         </>

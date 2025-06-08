@@ -1,10 +1,16 @@
 "use client"
 
-import InternProfile from "@/components/intern/profile";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+const DynamicInternProfile = dynamic(() => import("@/components/intern/profile"), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />,
+});
 
 export default function ProfilePage() {
     const { data: session, status } = useSession();
@@ -25,5 +31,9 @@ export default function ProfilePage() {
         if (!session) {
             return null; // Prevent rendering until navigation completes
         }
-    return <InternProfile />;
+    return (
+        <Suspense fallback={<Skeleton className="w-full h-96 rounded-lg bg-neutral-800" />}>
+            <DynamicInternProfile />
+        </Suspense>
+    );
 }
