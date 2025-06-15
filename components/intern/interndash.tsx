@@ -20,6 +20,14 @@ import places from "@/public/places.png";
 import discounts from "@/public/discounts.png";
 
 
+/**
+ * Intern dashboard main component.
+ * Renders a grid of quick-access cards for calendar, emergencies, essentials, and places.
+ *
+ * @component
+ * @example
+ * <Dash />
+ */
 export default function Dash() {
     return (
         <BentoGrid className="mt-16 max-w-full mx-auto md:auto-rows-[20rem]">

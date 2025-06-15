@@ -52,6 +52,16 @@ const data = {
   ],
 }
 
+/**
+ * Admin sidebar component for navigation in the admin dashboard.
+ * Displays links to dashboard, interns, team, and SRO slots.
+ * Uses theme-aware logo and integrates with NavMain and NavUser.
+ *
+ * @component
+ * @example
+ * <AppSidebar />
+ */
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { theme } = useTheme();
   const logoSrc = theme === "dark" ? "/iaeste_white.png" : "/iaeste.png";

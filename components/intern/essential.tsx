@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * Essentials component for displaying important info to interns.
+ * Shows wifi credentials and professor contact if available.
+ *
+ * @param onItemClick - Callback when an essential item is clicked
+ *
+ * @component
+ * @example
+ * <Essentials onItemClick={fn} />
+ */
 import React from "react";
 import { HoverEffect } from "@/components/ui/card-hover-effect-popup";
 import { useSession } from "next-auth/react";

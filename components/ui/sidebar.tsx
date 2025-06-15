@@ -745,6 +745,14 @@ const SidebarMenuSubButton = React.forwardRef<
 })
 SidebarMenuSubButton.displayName = "SidebarMenuSubButton"
 
+/**
+ * Sidebar UI component with support for mobile, keyboard shortcuts, and theming.
+ * Provides context for sidebar state and exposes customizable slots for content.
+ *
+ * @remarks
+ * Used throughout the app for navigation and layout structure.
+ */
+
 export {
   Sidebar,
   SidebarContent,

@@ -14,6 +14,19 @@ interface SROChecklistModalProps {
   internName: string;
 }
 
+/**
+ * Modal dialog for viewing and updating the SRO checklist for an intern.
+ * Fetches and saves checklist data via API. Used by LC members.
+ *
+ * @param isOpen - Whether the modal is open
+ * @param onClose - Function to close the modal
+ * @param internId - Intern's database ID
+ * @param internName - Intern's display name
+ *
+ * @component
+ * @example
+ * <SROChecklistModal isOpen={true} onClose={fn} internId="abc" internName="John Doe" />
+ */
 export function SROChecklistModal({ isOpen, onClose, internId, internName }: SROChecklistModalProps) {
   const [checklist, setChecklist] = useState({
     oiacIntimation: false,
