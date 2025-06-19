@@ -158,7 +158,7 @@ export default function SlotModifier() {
         <div className="p-4">Loading slots...</div>
       ) : (
         slots.map(slot => (
-          <Card key={slot._id} className="w-[50%] flex flex-col md:flex-row items-center gap-2 p-4">
+          <Card key={slot._id} className="w-[70%] flex flex-col md:flex-row items-center gap-2 p-4">
             {editSlotId === slot._id ? (
               <form className="flex flex-col md:flex-row gap-2 items-center w-full" onSubmit={handleUpdateSlot}>
                 <Input
