@@ -19,6 +19,9 @@ interface CreateInternForm {
   professorName: string;
   professorEmail: string;
   professorContact: string;
+  offerNumber: string;
+  passport: string;
+  countryOfOrigin: string;
 }
 
 interface CreateInternResult {
@@ -30,6 +33,9 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
   const [form, setForm] = useState<CreateInternForm>({
     internID: "",
     fullName: "",
+    offerNumber: "",
+    passport: "",
+    countryOfOrigin: "",
     photoUrl: "",
     startDate: "",
     endDate: "",
@@ -37,6 +43,7 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
     professorName: "",
     professorEmail: "",
     professorContact: ""
+
   });
   const [result, setResult] = useState<CreateInternResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -62,16 +69,24 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
     setResult(null);
+    // Validate required fields (no empty strings)
+    if (!form.offerNumber.trim() || !form.internID.trim() || !form.fullName.trim() || !form.passport.trim() || !form.countryOfOrigin.trim() || !form.startDate.trim() || !form.endDate.trim() || !form.sroSlot.trim() || !form.professorName.trim() || !form.professorEmail.trim() || !form.professorContact.trim()) {
+      setError("All required fields must be filled and not empty.");
+      return;
+    }
+    setLoading(true);
     try {
       const res = await fetch("/api/interns", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          offerNumber: form.offerNumber,
           internID: form.internID,
           fullName: form.fullName,
+          passport: form.passport,
+          countryOfOrigin: form.countryOfOrigin,
           photoUrl: form.photoUrl,
           startDate: form.startDate,
           endDate: form.endDate,
@@ -80,7 +95,8 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
             name: form.professorName,
             email: form.professorEmail,
             contact: form.professorContact
-          }
+          },
+          role: 'intern' // Ensure role is sent
         })
       });
       const data = await res.json();
@@ -90,15 +106,18 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
           plainPassword: data.plainPassword
         });
         setForm({
+          offerNumber: "",
           internID: "",
           fullName: "",
+          passport: "",
+          countryOfOrigin: "",
           photoUrl: "",
           startDate: "",
           endDate: "",
           sroSlot: "",
           professorName: "",
           professorEmail: "",
-          professorContact: ""
+          professorContact: "",
         });
       } else {
         setError(data.error || "Failed to create intern.");
@@ -129,8 +148,11 @@ export function CreateInternModal({ open, onOpenChange }: CreateInternModalProps
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3">
+            <Input name="offerNumber" placeholder="Offer Number" value={form.offerNumber} onChange={handleChange} required />
             <Input name="internID" placeholder="Intern ID (8 chars)" value={form.internID} onChange={handleChange} required minLength={8} maxLength={8} />
             <Input name="fullName" placeholder="Full Name" value={form.fullName} onChange={handleChange} required />
+            <Input name="passport" placeholder="Passport Number" value={form.passport} onChange={handleChange} required />
+            <Input name="countryOfOrigin" placeholder="Country of Origin" value={form.countryOfOrigin} onChange={handleChange} required />
             <Input name="photoUrl" placeholder="Photo URL (optional)" value={form.photoUrl} onChange={handleChange} />
             <Input name="startDate" type="date" placeholder="Start Date" value={form.startDate} onChange={handleChange} required />
             <Input name="endDate" type="date" placeholder="End Date" value={form.endDate} onChange={handleChange} required />

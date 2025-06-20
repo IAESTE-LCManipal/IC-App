@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/mongoose';
 import Intern from '@/app/api/models/intern';
 import SROChecklist from '@/app/api/models/sroChecklist';
+import Slot from '@/app/api/models/slot';
 
 // POST: /api/lc/section-stats
 export async function POST(request: Request) {
@@ -17,8 +18,20 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    // Get all interns in this SRO slot
-    const interns = await Intern.find({ sroSlot });
+    // Find the slot's date range
+    const slotDoc = await Slot.findOne({ slotNumber: Number(sroSlot) });
+    if (!slotDoc) {
+      return NextResponse.json({
+        success: false,
+        error: 'Slot not found',
+      }, { status: 404 });
+    }
+
+    // Find all interns whose stay overlaps with the slot's date range
+    const interns = await Intern.find({
+      startDate: { $lte: slotDoc.to },
+      endDate: { $gte: slotDoc.from },
+    });
     const internIDs = interns.map((i: { internID: string }) => i.internID);
 
     // Get all checklists for these interns

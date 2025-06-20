@@ -51,24 +51,22 @@ export function InternTable({ onOpenChecklist }: InternTableProps) {
   useEffect(() => {
     const fetchInterns = async () => {
       if (!session?.user) return;
-
+      // Get the LC's slot number
+      const sroSlot = (session.user && 'sroSlot' in session.user)
+        ? (session.user as { sroSlot?: string }).sroSlot
+        : undefined;
+      if (!sroSlot) return;
       try {
         setLoading(true);
-        // Fetch interns that match the LC's SRO slot
-        const response = await fetch('/api/interns/by-sro-slot', {
+        // Fetch interns whose stay overlaps with the LC's slot
+        const response = await fetch('/api/interns/by-active-slot', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            sroSlot: (session.user && 'sroSlot' in session.user)
-              ? (session.user as { sroSlot?: string }).sroSlot
-              : undefined,
-          }),
+          body: JSON.stringify({ slotNumber: sroSlot }),
         });
-
         const data = await response.json();
-
         if (data.success) {
           setInterns(data.data);
         } else {
