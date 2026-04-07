@@ -81,6 +81,7 @@ This project is for IAESTE Manipal University use. Contact the maintainers for l
 > For more details, see the codebase and inline documentation.
 
 
+```markdown
 # 📘 Attendance Upload Automation System
 
 ## 🎯 Overview
@@ -93,6 +94,7 @@ This system allows interns to upload attendance sheets that are:
 
 ## 🧱 System Architecture
 
+```
 
 Intern Dashboard (Frontend)
 ↓
@@ -104,6 +106,7 @@ MongoDB (Attendance Record)
 ↓
 Nodemailer (Email Notification)
 
+````
 
 ---
 
@@ -133,7 +136,7 @@ UPLOADTHING_TOKEN=your_uploadthing_token
 EMAIL_USER=yourgmail@gmail.com
 EMAIL_PASS=your_gmail_app_password
 FINANCE_EMAIL=finance@yourorg.com
-```
+````
 
 ---
 
@@ -168,8 +171,9 @@ FINANCE_EMAIL=finance@yourorg.com
 * Use NextAuth CredentialsProvider
 * Ensure correct field naming:
 
+  ```
   internID (case-sensitive)
-
+  ```
 * Store passwords using bcrypt hashing
 
 ---
@@ -178,8 +182,9 @@ FINANCE_EMAIL=finance@yourorg.com
 
 * Configure uploader in:
 
+  ```
   app/api/uploadthing/core.ts
-
+  ```
 * Use `UPLOADTHING_TOKEN` (base64), not API key
 
 ---
@@ -248,6 +253,7 @@ const internId = session?.user?.id;
 
 ## 📊 Data Flow
 
+```
 Upload Button
    ↓
 UploadThing → returns file URL
@@ -257,6 +263,7 @@ POST /api/attendance/upload
 MongoDB (attendance collection)
    ↓
 Nodemailer → Finance Email
+```
 
 ---
 
@@ -314,6 +321,16 @@ Nodemailer → Finance Email
 * Rotate credentials regularly
 * Use production email service (Resend/SendGrid recommended)
 * Replace deprecated UploadThing `file.url` → `file.ufsUrl`
+
+---
+
+## 🔮 Future Improvements
+
+* Finance dashboard for viewing uploads
+* Upload status tracking
+* Deadline enforcement
+* Multiple uploads per slot
+* Replace Gmail with scalable email provider
 
 ---
 
