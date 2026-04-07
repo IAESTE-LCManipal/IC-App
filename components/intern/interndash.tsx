@@ -18,7 +18,9 @@ import calendar from "@/public/calendar.png";
 import essentials from "@/public/essentials.png";
 import places from "@/public/places.png";
 import discounts from "@/public/discounts.png";
-
+import ImageUpload from "@/components/image-upload";
+import AttendanceUpload from "@/components/attendance-upload";
+import { useSession } from "next-auth/react";
 
 /**
  * Intern dashboard main component.
@@ -29,20 +31,40 @@ import discounts from "@/public/discounts.png";
  * <Dash />
  */
 export default function Dash() {
+    const { data: session, status } = useSession();
+
+    if (status === "loading") return null;
+    if (!session) return <div>Please login</div>;
+
+    const internId = session.user.id;
+    const slotId = undefined;
+
     return (
-        <BentoGrid className="mt-16 max-w-full mx-auto md:auto-rows-[20rem]">
-        {items.map((item, i) => (
-            <BentoGridItem
-            key={i}
-            title={item.title}
-            description={item.description}
-            header={item.header}
-            className={cn("[&>p:text-lg]", item.className)}
-            icon={item.icon}
-            href={item.href}
-            />
-        ))}
-        </BentoGrid>
+        <div className="flex flex-col gap-6 mt-16">
+            
+            <div className="max-w-4xl mx-auto w-full">
+                {internId && (
+                    <ImageUpload 
+                        internId={internId} 
+                        slotId={slotId} 
+                    />
+                )}
+            </div>
+
+            <BentoGrid className="max-w-full mx-auto md:auto-rows-[20rem]">
+                {items.map((item, i) => (
+                    <BentoGridItem
+                        key={i}
+                        title={item.title}
+                        description={item.description}
+                        header={item.header}
+                        className={cn("[&>p:text-lg]", item.className)}
+                        icon={item.icon}
+                        href={item.href}
+                    />
+                ))}
+            </BentoGrid>
+        </div>
     );
 }
 
